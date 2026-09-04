@@ -1,7 +1,7 @@
 function Perfil() {
   return (
     <div>
-        Oi
+        Perfil
     </div>
   )
 }
