@@ -18,7 +18,8 @@ export function useTheme(){
     return { theme, toggleTheme}
 }
 // Botão p/ colocar em qualquer lugar:
-/*import { useTheme } from '../hooks/useTheme'
+/*
+import { useTheme } from '../hooks/useTheme'
 
 const { theme, toggleTheme } = useTheme()
 
