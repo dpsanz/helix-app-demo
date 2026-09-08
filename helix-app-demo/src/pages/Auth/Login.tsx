@@ -9,7 +9,7 @@ export default function Login() {
     const navigate = useNavigate()
 
     function handleSubmit(event: React.FormEvent) {
-        e.preventDefault()
+        event.preventDefault()
         login()
         navigate('/perfil')
     }
