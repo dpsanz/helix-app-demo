@@ -17,3 +17,13 @@ export function useTheme(){
 
     return { theme, toggleTheme}
 }
+// Botão p/ colocar em qualquer lugar:
+/*import { useTheme } from '../hooks/useTheme'
+
+const { theme, toggleTheme } = useTheme()
+
+<button onClick={toggleTheme}>
+  {theme === 'dark' ? 'Light' : 'Dark'}
+</button>
+*/
+// /className="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100"
