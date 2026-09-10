@@ -297,3 +297,113 @@
 .modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); }.modal { width: min(500px,100%); max-height: 90vh; overflow: auto; position: relative; background: #111715; border: 1px solid #2a3b35; border-radius: 18px; padding: 28px; box-shadow: 0 30px 80px #000; }.modal.wide { width: min(620px,100%); }.modal-close { position: absolute; top: 16px; right: 18px; color: #89958f; font-size: 1.5rem; }.modal h2 { font-size: 1.7rem; margin: 14px 0 2px; }.modal-lead { margin-bottom: 20px; }.info-block,.recommendation { margin: 18px 0; padding: 15px; border-radius: 10px; background: #0a100e; border: 1px solid #24312c; }.info-block small { display: block; color: #7c8984; margin-bottom: 10px; }.recommendation { border-left: 3px solid #ffb866; }.recommendation strong { display: block; margin-bottom: 5px; }.disclaimer { border-top: 1px solid #27332f; padding-top: 15px; font-size: .7rem !important; }.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }.success-message { color: #b5ffeb; background: rgba(13,158,115,.13); border: 1px solid rgba(13,158,115,.35); border-radius: 10px; padding: 14px; margin-top: 20px; }
 @media (max-width: 800px) { .dashboard-grid { grid-template-columns: 1fr; }.panel.span-2 { grid-column: auto; }.profile-hero { align-items: flex-start; flex-wrap: wrap; }.profile-hero > .status-ok { margin-left: 80px; }.section-heading { align-items: flex-start; flex-direction: column; }.medication-card { flex-wrap: wrap; }.medication-card .primary-btn { width: 100%; }.patient-time { display: none; }.patient-row .status-ok,.patient-row .status-alert { display: none; } }
 @media (max-width: 520px) { .topbar { padding: 0 14px; }.top-actions .ghost-btn:first-child { display: none; }.dashboard { width: min(100% - 24px,1180px); }.panel { padding: 18px; }.filters { width: 100%; }.filters button { flex: 1; padding-inline: 5px; }.modal-actions { flex-direction: column; }.modal-actions button { width: 100%; } }
+
+/* Dashboard visual: mesma atmosfera escura e verde da tela de login */
+.app-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 224px minmax(0, 1fr);
+  background:
+    radial-gradient(circle at 72% 12%, rgba(13, 158, 115, .12), transparent 28%),
+    radial-gradient(circle at 30% 92%, rgba(181, 255, 235, .05), transparent 25%),
+    #050706;
+}
+
+.app-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 20%, rgba(0, 0, 0, .45) 100%);
+}
+
+.topbar {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  height: 100vh;
+  padding: 30px 20px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  background: rgba(4, 7, 6, .82);
+  border: 0;
+  border-right: 1px solid rgba(181, 255, 235, .16);
+  backdrop-filter: blur(20px);
+}
+
+.brand { padding: 0 10px 30px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.brand img { width: 35px; height: 35px; }
+.top-actions { flex: 1; padding-top: 24px; flex-direction: column; }
+.top-actions::before { content: 'NAVEGAÇÃO'; color: #52605b; font-size: .62rem; letter-spacing: .14em; margin: 0 10px 4px; }
+.top-actions .ghost-btn { width: 100%; padding: 12px 13px; text-align: left; border-color: transparent; }
+.top-actions .ghost-btn:first-child { color: #dffaf2; background: rgba(13,158,115,.12); border-color: rgba(13,158,115,.2); }
+.top-actions .ghost-btn:last-child { margin-top: auto; }
+
+.dashboard { position: relative; z-index: 1; width: min(1240px, calc(100% - 56px)); padding-top: 24px; }
+.demo-banner { background: linear-gradient(90deg, rgba(13,158,115,.08), rgba(181,255,235,.03)); border-radius: 6px; text-align: left; }
+.profile-hero { padding: 30px 2px; }
+.profile-hero h1 { letter-spacing: -.035em; }
+
+.metric-grid { display: grid; gap: 12px; margin-bottom: 14px; }
+.beneficiary-metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.doctor-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.metric-card {
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  background: linear-gradient(145deg, rgba(17,25,22,.96), rgba(8,13,11,.96));
+  border: 1px solid rgba(181,255,235,.13);
+  border-radius: 10px;
+  box-shadow: inset 0 1px rgba(255,255,255,.025), 0 12px 30px rgba(0,0,0,.13);
+}
+.metric-card span { color: #81908a; font-size: .74rem; }
+.metric-card strong { color: #eef9f5; font-size: 2rem; line-height: 1; letter-spacing: -.04em; }
+.metric-card strong.metric-text { font-size: 1.35rem; color: #8ee2ca; }
+.metric-card small { color: #58655f; font-size: .66rem; }
+.metric-card.alert-metric { background: linear-gradient(145deg, rgba(50,34,15,.56), rgba(12,14,12,.96)); border-color: rgba(255,184,102,.23); }
+.metric-card.alert-metric strong { color: #ffb866; }
+
+.dashboard-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.dashboard-grid > .panel:last-child { grid-column: span 3; }
+.panel {
+  border-radius: 10px;
+  border-color: rgba(181,255,235,.13);
+  background: linear-gradient(145deg, rgba(15,22,19,.96), rgba(7,11,9,.98));
+  box-shadow: inset 0 1px rgba(255,255,255,.025), 0 18px 42px rgba(0,0,0,.17);
+}
+.gene-chip, .kit-card, .medication-card, .filters button, .patient-row { border-radius: 7px; }
+.gene-chip { min-width: 86px; padding: 9px 12px; text-align: center; }
+.kit-card { background: rgba(0,0,0,.18); }
+.medication-card { min-height: 90px; background: linear-gradient(90deg, rgba(255,184,102,.06), rgba(0,0,0,.12)); border-color: rgba(255,184,102,.2); }
+.patient-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding-top: 18px; border-top: 1px solid #202b27; }
+.patient-row { padding: 16px; border: 1px solid #202b27; background: rgba(0,0,0,.16); }
+.patient-row:hover { border-color: rgba(13,158,115,.55); background: rgba(13,158,115,.07); transform: translateY(-1px); }
+
+@media (max-width: 1000px) {
+  .beneficiary-metrics { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .dashboard-grid > .panel:last-child { grid-column: span 2; }
+}
+
+@media (max-width: 800px) {
+  .app-shell { display: block; }
+  .topbar { position: relative; height: 68px; padding: 0 18px; flex-direction: row; align-items: center; justify-content: space-between; border-right: 0; border-bottom: 1px solid rgba(181,255,235,.14); }
+  .brand { padding: 0; border: 0; }
+  .top-actions { flex: 0; padding: 0; flex-direction: row; }
+  .top-actions::before { display: none; }
+  .top-actions .ghost-btn:last-child { margin: 0; }
+  .dashboard { width: min(100% - 28px,1240px); }
+  .doctor-metrics { grid-template-columns: repeat(3,1fr); }
+  .patient-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .beneficiary-metrics, .doctor-metrics { grid-template-columns: repeat(2,1fr); }
+  .doctor-metrics .metric-card:last-child { grid-column: span 2; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .dashboard-grid > .panel:last-child { grid-column: auto; }
+  .metric-card { min-height: 112px; }
+}

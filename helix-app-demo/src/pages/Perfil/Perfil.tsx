@@ -13,6 +13,12 @@ export default function Perfil() {
     <main className="dashboard">
       <div className="demo-banner">Ambiente demonstrativo · Todos os dados exibidos são fictícios</div>
       <section className="profile-hero"><div className="avatar">{beneficiary.initials}</div><div><span className="eyebrow">Perfil do beneficiário</span><h1>{beneficiary.name}</h1><p>ID Helix {beneficiary.id} · {beneficiary.plan}</p></div><span className="status-ok">● {beneficiary.genomicStatus}</span></section>
+      <section className="metric-grid beneficiary-metrics">
+        <article className="metric-card"><span>Genes mapeados</span><strong>03</strong><small>Painel farmacogenômico</small></article>
+        <article className="metric-card"><span>Medicamentos</span><strong>01</strong><small>Em acompanhamento</small></article>
+        <article className="metric-card alert-metric"><span>Pontos de atenção</span><strong>01</strong><small>Revisão recomendada</small></article>
+        <article className="metric-card"><span>Status da análise</span><strong className="metric-text">Concluída</strong><small>Perfil atualizado</small></article>
+      </section>
       <div className="dashboard-grid">
         <section className="panel span-2"><div className="section-heading"><div><span className="eyebrow">Farmacogenômica</span><h2>Meu perfil genômico</h2></div><span className="muted">Carteirinha {beneficiary.cardNumber}</span></div><div className="gene-row">{beneficiary.genes.map(gene => <span className="gene-chip" key={gene}>{gene}</span>)}</div><div className="kit-card"><div><strong>{beneficiary.kit.name}</strong><p>Coletado em {beneficiary.kit.collectedAt} · Processado em {beneficiary.kit.processedAt}</p></div><span className="status-ok">{beneficiary.kit.status}</span></div></section>
         <section className="panel"><span className="eyebrow">Linha do tempo</span><h2>Histórico recente</h2><div className="timeline">{beneficiary.history.map(item => <div className="timeline-item" key={item.date}><span></span><div><small>{item.date}</small><strong>{item.title}</strong><p>{item.description}</p></div></div>)}</div></section>
