@@ -17,6 +17,100 @@
   }
 }
 
+.login-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(13, 158, 115, 0.14), transparent 34%),
+    #050506;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: -34%;
+  right: 12%;
+  width: 42%;
+  height: 145%;
+  transform: rotate(31deg);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(13, 158, 115, 0.08) 30%,
+    rgba(181, 255, 235, 0.42) 50%,
+    rgba(13, 158, 115, 0.08) 70%,
+    transparent 100%
+  );
+  filter: blur(18px);
+  opacity: 0.95;
+}
+
+.login-page::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.48) 100%);
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid rgba(181, 255, 235, 0.24);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(13, 158, 115, 0.08);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(181, 255, 235, 0.06);
+  pointer-events: none;
+}
+
+.login-card > * {
+  position: relative;
+}
+
+.login-input {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.helix-button-hover {
+  letter-spacing: 0;
+  transition:
+    background-color 280ms ease,
+    border-color 280ms ease,
+    color 280ms ease,
+    letter-spacing 280ms ease,
+    transform 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.helix-button-hover:hover {
+  letter-spacing: 0.04em;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(13, 158, 115, 0.16);
+}
+
+.helix-button-hover:focus-visible {
+  outline: 2px solid var(--color-helix-lightgreen);
+  outline-offset: 3px;
+}
+
 .hero {
   position: relative;
 
