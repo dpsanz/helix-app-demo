@@ -19,7 +19,7 @@ export default function Login() {
           <div className='login-card w-full max-w-sm rounded-2xl p-8'>
                 
                 <div className='text-center mb-6'>
-                  <img src="/logo.svg" alt="Logo" className='mx-auto' width="50" height="50" />
+                  <img src="/logo.svg" alt="Logo" className='mx-auto' width="40" height="40" />
                 </div>
                 <h2 className='text-lg font-semibold mb-1 text-center'>Bem Vindo de volta</h2>
                 <p className='text-sm text-neutral-400 mb-6 text-center'>Acesse seu perfil genômico Unimed</p>
