@@ -22,7 +22,7 @@ export default function Login() {
       <p className="text-sm text-neutral-400 mb-5 text-center">Acesse a plataforma genômica Helix</p>
       <div className="grid grid-cols-2 gap-2 mb-5" role="group" aria-label="Tipo de acesso">
         <button type="button" onClick={() => setRole('beneficiary')} className={`access-option ${role === 'beneficiary' ? 'access-option-active' : ''}`}>Beneficiário</button>
-        <button type="button" onClick={() => setRole('doctor')} className={`access-option ${role === 'doctor' ? 'access-option-active' : ''}`}>Médico cooperado</button>
+        <button type="button" onClick={() => setRole('doctor')} className={`access-option ${role === 'doctor' ? 'access-option-active' : ''}`}>Médico Cooperado</button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div><label className="text-xs text-neutral-400 mb-1 block">CPF ou e-mail</label><input type="text" value={cpfEmail} onChange={e => setCpfEmail(e.target.value)} className="login-input w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-helix-green" placeholder="seu.nome@endereco.com" required /></div>
