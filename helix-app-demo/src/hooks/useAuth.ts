@@ -2,14 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 
 export type AccessRole = 'beneficiary' | 'doctor'
 const SESSION_KEY = 'helix_demo_session'
-type Session = { isAuthenticated: boolean; role: AccessRole | null }
+type Session = { isAuthenticated: boolean; role: AccessRole | null; userId: string | null }
 
 function readSession(): Session {
   try {
     const saved = localStorage.getItem(SESSION_KEY)
-    if (saved) return JSON.parse(saved) as Session
+    if (saved) {
+      const parsed = JSON.parse(saved) as Partial<Session>
+      if (parsed.isAuthenticated && parsed.role && parsed.userId) return parsed as Session
+    }
   } catch { localStorage.removeItem(SESSION_KEY) }
-  return { isAuthenticated: false, role: null }
+  return { isAuthenticated: false, role: null, userId: null }
 }
 
 export function useAuth() {
@@ -24,7 +27,7 @@ export function useAuth() {
     localStorage.setItem(SESSION_KEY, JSON.stringify(next)); setSession(next)
     window.dispatchEvent(new Event('helix-session-change'))
   }, [])
-  const login = (role: AccessRole) => save({ isAuthenticated: true, role })
-  const logout = () => { localStorage.removeItem(SESSION_KEY); setSession({ isAuthenticated: false, role: null }); window.dispatchEvent(new Event('helix-session-change')) }
+  const login = (userId: string, role: AccessRole) => save({ isAuthenticated: true, role, userId })
+  const logout = () => { localStorage.removeItem(SESSION_KEY); setSession({ isAuthenticated: false, role: null, userId: null }); window.dispatchEvent(new Event('helix-session-change')) }
   return { ...session, login, logout }
 }

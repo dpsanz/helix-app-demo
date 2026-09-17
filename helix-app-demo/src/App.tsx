@@ -11,8 +11,8 @@ function App() {
   const home = role === 'doctor' ? '/portal-medico' : '/perfil'
   return <BrowserRouter><Routes>
     <Route path="/" element={isAuthenticated ? <Navigate to={home} /> : <Login />} />
-    <Route path="/perfil" element={isAuthenticated ? <Perfil /> : <Navigate to="/" />} />
-    <Route path="/portal-medico" element={isAuthenticated ? <PortalMedico /> : <Navigate to="/" />} />
+    <Route path="/perfil" element={isAuthenticated && role === 'beneficiary' ? <Perfil /> : <Navigate to="/" />} />
+    <Route path="/portal-medico" element={isAuthenticated && role === 'doctor' ? <PortalMedico /> : <Navigate to="/" />} />
     <Route path="/cadastro" element={<Cadastro />} />
     <Route path="*" element={<Navigate to="/" />} />
   </Routes></BrowserRouter>
