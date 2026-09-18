@@ -28,9 +28,9 @@ export default function Login() {
     }
   }
 
-  return <div className="login-page min-h-screen flex items-center justify-center px-4">
-    <div className="login-card w-full max-w-sm rounded-2xl p-8">
-      <div className="login-brand"><img src="/logo.svg" alt="" /><strong>HELIX</strong></div>
+  return <div className="login-page page-enter min-h-screen flex items-center justify-center px-4">
+    <div className="login-card ui-card w-full max-w-sm rounded-2xl p-8">
+      <div className="login-brand"><img src="/logo.svg" alt="" /><strong></strong></div>
       <h1 className="text-lg font-semibold mb-1 text-center">Bem-vindo de volta</h1>
       <p className="text-sm text-neutral-400 mb-5 text-center">Acesse sua conta Helix</p>
       <div className="grid grid-cols-2 gap-2 mb-5" role="group" aria-label="Tipo de acesso">

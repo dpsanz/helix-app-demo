@@ -95,7 +95,7 @@ export default function Cadastro() {
   }
 
   return (
-    <main className="signup-page">
+    <main className="signup-page page-enter">
       <div className="signup-orb signup-orb-one" />
       <div className="signup-orb signup-orb-two" />
 
@@ -118,7 +118,7 @@ export default function Cadastro() {
           </div>
         </div>
 
-        <div className="signup-card">
+        <div className="signup-card ui-card">
           <div className="signup-card-head">
             <div><span>Cadastro em 4 passos</span><strong>{steps[step].eyebrow}</strong></div>
             <span className="step-count">0{step + 1} <i>/ 04</i></span>

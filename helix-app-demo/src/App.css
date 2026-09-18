@@ -993,3 +993,114 @@
 @media (max-width: 560px) {
   .patient-detail-grid { grid-template-columns: 1fr; }
 }
+
+/* Sistema tipográfico e de movimento Helix */
+.login-page, .signup-page, .app-shell, .modal, button, input {
+  font-family: var(--font-sans);
+}
+
+.signup-intro h1, .content-heading h2, .signup-card-head div span, .consent-card strong {
+  font-family: var(--font-serif);
+}
+
+.signup-kicker, .signup-card-head div strong, .step-count, .step-dot, .stepper small,
+.content-heading > span, .signup-fields label span, .medication-field span,
+.chip-group > span, .plan-card-field span, .plan-id > span, .plan-copy strong em,
+.plan-option b, .gene-chip, .patient-time, .metric-card strong, .metric-card small {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Escala mínima: nenhum texto informativo fica abaixo de 11px */
+.top-actions::before, .metric-card small, .brand .brand-lockup span,
+.signup-card-head div strong, .stepper small, .content-heading > span,
+.signup-fields label span, .medication-field span, .chip-group > span,
+.plan-card-field span, .plan-id > span, .plan-id small, .plan-copy small,
+.plan-copy strong em, .plan-option b, .consent-card p, .privacy-list li,
+.consent-check > span, .skip-button, .signup-footer, .login-storage-note,
+.doctor-demo-access, .profile-facts small, .patient-detail-grid small {
+  font-size: .6875rem;
+  line-height: 1.5;
+}
+
+.signup-login, .signup-trust strong, .signup-trust small, .step-count i,
+.content-heading p, .signup-fields input, .medication-field input,
+.plan-card-field input, .plan-id strong, .plan-copy strong, .chip-group button,
+.continue-button, .back-button, .auth-error, .signup-error, .demo-banner,
+.eyebrow, .status-ok, .status-alert, .timeline-item small,
+.patient-time, .patient-name small, .filters button, .ghost-btn,
+.primary-btn, .secondary-btn, .empty-patients p {
+  font-size: .75rem;
+  line-height: 1.5;
+}
+
+.signup-intro > p, .content-heading p, .consent-card p,
+.kit-card p, .medication-card p, .timeline p, .modal p,
+.profile-hero p, .muted, .profile-facts strong, .patient-detail-grid strong {
+  font-size: .8125rem;
+  line-height: 1.65;
+}
+
+.signup-fields input, .medication-field input, .plan-card-field input,
+.edit-fields input, .login-input {
+  min-height: 42px;
+  font-size: .8125rem;
+}
+
+.signup-kicker { font-size: .75rem; }
+.signup-brand strong, .login-brand strong { font-size: .9rem; }
+.signup-card-head div span { font-size: 1.2rem; }
+.step-count { font-size: 1.05rem; }
+.step-dot { font-size: .75rem; }
+.content-heading h2 { font-size: 2rem; line-height: 1.1; }
+.content-heading p { margin-top: 7px; }
+.plan-copy strong { font-size: .78rem; }
+.consent-card strong { font-size: 1.05rem; }
+.panel h2 { font-size: 1.125rem; line-height: 1.3; }
+.metric-card span { font-size: .75rem; }
+.patient-name strong { font-size: .8125rem; }
+.empty-patients strong { font-size: .875rem; }
+
+.signup-card { min-height: 640px; }
+.signup-content { min-height: 375px; }
+.signup-fields { gap: 16px 14px; }
+.chip-group button { padding: 7px 11px; }
+.plan-option { min-height: 66px; }
+
+/* Curva e duração compartilhadas para todas as interações */
+.ghost-btn, .filters button, .primary-btn, .secondary-btn, .access-option,
+.helix-button-hover, .continue-button, .back-button, .skip-button,
+.plan-option, .chip-group button, .patient-row, .metric-card, .panel,
+.kit-card, .medication-card, .login-input, .signup-fields input,
+.medication-field input, .plan-card-field input, .edit-fields input,
+.modal-close, .signup-login, .doctor-demo-access button {
+  transition:
+    color 260ms var(--ease-helix),
+    background-color 260ms var(--ease-helix),
+    border-color 260ms var(--ease-helix),
+    box-shadow 260ms var(--ease-helix),
+    opacity 260ms var(--ease-helix),
+    transform 260ms var(--ease-helix);
+}
+
+button:active:not(:disabled) { transform: scale(.975); }
+.panel:hover, .metric-card:hover { border-color: rgba(168,242,219,.22); transform: translateY(-2px); box-shadow: 0 20px 45px rgba(0,0,0,.2); }
+.patient-row:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.18); }
+.modal-backdrop { animation: backdrop-in 240ms ease-out both; }
+.modal { animation: modal-enter 360ms var(--ease-helix) both; transform-origin: center; }
+.dashboard > * { animation: dashboard-item-in 520ms var(--ease-helix) both; }
+.dashboard > :nth-child(2) { animation-delay: 50ms; }
+.dashboard > :nth-child(3) { animation-delay: 100ms; }
+.dashboard > :nth-child(4) { animation-delay: 150ms; }
+.topbar { animation: sidebar-in 480ms var(--ease-helix) both; }
+
+@keyframes backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dashboard-item-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sidebar-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+@media (max-width: 560px) {
+  .signup-card { min-height: 650px; }
+  .signup-content { min-height: 410px; }
+  .stepper small { font-size: .625rem; }
+  .content-heading h2 { font-size: 1.8rem; }
+}

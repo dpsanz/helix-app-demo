@@ -38,7 +38,7 @@ export default function Perfil() {
   const medication = user.health?.medication || 'Nenhum medicamento informado'
   const hasMedication = Boolean(user.health?.medication)
 
-  return <div className="app-shell">
+  return <div className="app-shell page-enter">
     <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="" /><div className="brand-lockup"><strong>HELIX</strong><span>BENEFICIÁRIO</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={() => setEditing(true)}>Editar perfil</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
     <main className="dashboard">
       <div className="demo-banner">Perfil salvo localmente neste navegador · ID {user.id}</div>

@@ -52,7 +52,7 @@ export default function PortalMedico() {
   if (loading) return <div className="app-loading"><img src="/logo.svg" alt="" /><span>Carregando pacientes…</span></div>
   if (!doctor) return <div className="app-loading"><p>Conta médica não encontrada.</p><button className="primary-btn" onClick={leave}>Voltar ao login</button></div>
 
-  return <div className="app-shell medical">
+  return <div className="app-shell medical page-enter">
     <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="Helix" /><div className="brand-lockup"><strong>HELIX</strong><span>PROFISSIONAL</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={load}>Atualizar pacientes</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
     <main className="dashboard">
       <div className="demo-banner">Portal médico local · Novas contas beneficiárias aparecem automaticamente aqui</div>
