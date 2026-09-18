@@ -107,12 +107,12 @@ function Metric({ label, value, detail, alert = false }: { label: string; value:
 function UserRow({ user, onDelete }: { user: HelixUser; onDelete: () => void }) {
   const systemAccount = user.role === 'doctor'
   return <tr>
-    <td><div className="management-user"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} size="small" /><div><strong>{user.name}</strong><small>{user.email}</small></div></div></td>
-    <td><span className={`role-badge ${user.role}`}>{user.role === 'doctor' ? 'Médico' : 'Beneficiário'}</span></td>
-    <td><strong className="management-code">{user.id}</strong><small>{formatCpf(user.cpf)}</small></td>
-    <td><strong>{user.plan || 'Conta de sistema'}</strong><small>{user.cardNumber || 'Acesso profissional'}</small></td>
-    <td><strong>{new Intl.DateTimeFormat('pt-BR').format(new Date(user.createdAt))}</strong><small>{new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' }).format(new Date(user.createdAt))}</small></td>
-    <td>{systemAccount ? <span className="system-lock">Sistema</span> : <button className="row-delete" onClick={onDelete}>Excluir</button>}</td>
+    <td data-label="Cadastro"><div className="management-user"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} size="small" /><div><strong>{user.name}</strong><small>{user.email}</small></div></div></td>
+    <td data-label="Tipo"><span className={`role-badge ${user.role}`}>{user.role === 'doctor' ? 'Médico' : 'Beneficiário'}</span></td>
+    <td data-label="Identificação"><strong className="management-code">{user.id}</strong><small>{formatCpf(user.cpf)}</small></td>
+    <td data-label="Plano / vínculo"><strong>{user.plan || 'Conta de sistema'}</strong><small>{user.cardNumber || 'Acesso profissional'}</small></td>
+    <td data-label="Criado em"><strong>{new Intl.DateTimeFormat('pt-BR').format(new Date(user.createdAt))}</strong><small>{new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit' }).format(new Date(user.createdAt))}</small></td>
+    <td data-label="Ações">{systemAccount ? <span className="system-lock">Sistema</span> : <button className="row-delete" onClick={onDelete}>Excluir</button>}</td>
   </tr>
 }
 

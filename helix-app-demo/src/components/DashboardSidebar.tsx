@@ -84,7 +84,6 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
     <button className="sidebar-workspace" onClick={() => setWorkspaceOpen(open => !open)} aria-expanded={workspaceOpen} aria-controls="workspace-details">
       <span className="workspace-mark"><Icon name={isDoctor ? 'patients' : 'profile'} /></span>
       <span><strong>{isDoctor ? 'Painel clínico' : 'Meu espaço'}</strong><small>{isDoctor ? 'Área profissional' : 'Plano ativo'}</small></span>
-      <span className="workspace-chevron" aria-hidden="true">⌄</span>
     </button>
     <div className={`workspace-menu ${workspaceOpen ? 'open' : ''}`} id="workspace-details">
       <span>Conta atual</span><strong>{name}</strong><small>ID {userId}</small>

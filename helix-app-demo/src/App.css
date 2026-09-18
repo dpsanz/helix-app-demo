@@ -1566,7 +1566,7 @@ button:active:not(:disabled) { transform: scale(.975); }
 .sidebar-workspace {
   width: 100%;
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) auto;
+  grid-template-columns: 36px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   margin: 5px 0 22px;
@@ -1628,9 +1628,6 @@ button:active:not(:disabled) { transform: scale(.975); }
   color: #60716b;
   font-size: .65rem;
 }
-
-.workspace-chevron { color: #61746d; font-size: 1rem; transition: transform 240ms var(--ease-helix); }
-.sidebar-workspace[aria-expanded="true"] .workspace-chevron { transform: rotate(180deg); }
 
 .workspace-menu {
   max-height: 0;
@@ -1789,9 +1786,14 @@ button:active:not(:disabled) { transform: scale(.975); }
 .metric-card {
   position: relative;
   overflow: hidden;
-  min-height: 138px;
+  min-height: 116px;
+  justify-content: flex-start;
+  gap: 8px;
   padding: 20px;
 }
+
+.metric-card strong { margin-top: 2px; }
+.metric-card small { margin-top: 0; }
 
 .metric-card::after {
   content: '';
@@ -1880,6 +1882,168 @@ button:active:not(:disabled) { transform: scale(.975); }
   .dashboard { padding-inline: 12px; }
   .profile-hero { align-items: center; padding: 18px; }
   .profile-hero > .status-ok { width: 100%; margin: 2px 0 0; padding-left: 58px; }
-  .metric-card { min-height: 122px; padding: 16px; }
+  .metric-card { min-height: 108px; gap: 7px; padding: 16px; }
   .panel { padding: 20px 16px; }
+}
+
+/* Cobertura responsiva compartilhada entre todas as páginas */
+@media (max-width: 700px) {
+  html { font-size: 15px; }
+
+  .auth-nav,
+  .signup-nav,
+  .management-nav {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .login-page,
+  .signup-page,
+  .management-page,
+  .app-shell {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .login-layout,
+  .signup-wrap,
+  .management-shell {
+    width: calc(100% - 24px);
+  }
+
+  .login-card,
+  .signup-card {
+    width: 100%;
+    max-width: 100%;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .signup-card-head {
+    margin-right: -18px;
+    margin-left: -18px;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .signup-intro h1 { font-size: clamp(2rem, 11vw, 2.65rem); }
+  .signup-fields { grid-template-columns: minmax(0, 1fr); }
+  .signup-fields .field-wide { grid-column: auto; }
+  .signup-actions { gap: 12px; }
+  .continue-button { min-width: 132px; }
+  .plan-option { flex-wrap: wrap; }
+  .plan-option b { margin-left: auto; }
+
+  .site-footer {
+    height: auto;
+    min-height: 58px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 14px;
+    text-align: center;
+  }
+
+  .profile-hero {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .profile-hero > .status-ok {
+    grid-column: 1 / -1;
+    width: auto;
+    margin: 0;
+    padding-left: 0;
+  }
+
+  .metric-card strong { font-size: 1.7rem; }
+  .metric-card strong.metric-text { font-size: 1.15rem; }
+  .section-heading { width: 100%; }
+  .filters { overflow-x: auto; max-width: 100%; padding-bottom: 2px; }
+  .filters button { min-width: max-content; }
+  .patient-row { min-width: 0; padding: 14px 12px; }
+  .patient-name { min-width: 0; }
+  .patient-name strong,
+  .patient-name small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .medication-card { align-items: flex-start; }
+  .medication-card .grow { min-width: 0; }
+  .gene-row { gap: 6px; }
+  .gene-chip { min-width: 0; }
+  .trend-heading { flex-wrap: wrap; }
+  .trend-chart svg { height: 112px; }
+
+  .modal-backdrop {
+    align-items: end;
+    padding: 10px;
+  }
+
+  .modal,
+  .modal.wide,
+  .delete-dialog {
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    box-sizing: border-box;
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+
+  .patient-detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .photo-editor { align-items: flex-start; }
+
+  .management-shell { padding: 24px 0 40px; }
+  .management-heading { gap: 18px; }
+  .management-heading h1 { font-size: clamp(1.65rem, 9vw, 2.2rem); }
+  .management-toolbar { gap: 14px; padding: 14px; }
+  .management-filters { overflow-x: auto; }
+  .management-filters button { min-width: max-content; }
+  .management-notice { margin-right: 0; margin-left: 0; }
+  .management-panel { overflow: visible; background: transparent; border: 0; }
+  .management-table-wrap { overflow: visible; }
+  .management-table,
+  .management-table tbody,
+  .management-table tr,
+  .management-table td { display: block; width: 100%; box-sizing: border-box; }
+  .management-table thead { display: none; }
+  .management-table tbody { display: grid; gap: 10px; margin-top: 12px; }
+  .management-table tr {
+    padding: 10px 14px;
+    background: linear-gradient(145deg, rgba(15,22,19,.97), rgba(7,11,9,.99));
+    border: 1px solid rgba(168,242,219,.13);
+    border-radius: 10px;
+  }
+  .management-table td {
+    min-height: 42px;
+    display: grid;
+    grid-template-columns: minmax(88px, .42fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(32,43,39,.75);
+  }
+  .management-table td::before {
+    content: attr(data-label);
+    color: #60706a;
+    font: 600 .62rem var(--font-mono);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+  .management-table td:last-child { border-bottom: 0; }
+  .management-user { min-width: 0; }
+  .management-user div { min-width: 0; }
+  .management-user small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-delete { justify-self: start; }
+}
+
+@media (max-width: 420px) {
+  .beneficiary-metrics,
+  .doctor-metrics,
+  .management-metrics { grid-template-columns: minmax(0, 1fr); }
+  .doctor-metrics .metric-card:last-child { grid-column: auto; }
+  .metric-card { min-height: 98px; }
+  .management-metric { min-height: 92px; }
+  .login-role-tabs { grid-template-columns: minmax(0, 1fr); }
+  .signup-actions { align-items: stretch; flex-direction: column-reverse; }
+  .signup-actions button { width: 100%; }
+  .site-footer nav { width: 100%; justify-content: center; flex-wrap: wrap; }
 }
