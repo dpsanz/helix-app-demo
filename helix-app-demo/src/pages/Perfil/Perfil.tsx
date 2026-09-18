@@ -71,10 +71,10 @@ export default function Perfil() {
   const hasDiabetes = user.health?.conditions.some(condition => condition.toLowerCase().includes('diabet')) ?? false
 
   return <div className="app-shell page-enter">
-    <DashboardSidebar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} role="beneficiary" onPrimaryAction={openEditor} onLogout={leave} />
-    <main className="dashboard" id="overview">
+    <DashboardSidebar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} role="beneficiary" onPrimaryAction={openEditor} onLogout={leave} primaryTargetId="profile-editor" />
+    <main className="dashboard">
       <div className="demo-banner">Perfil salvo localmente neste navegador · ID {user.id}</div>
-      <section className="profile-hero"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} /><div><span className="eyebrow">Perfil do beneficiário</span><h1>{user.name}</h1><p>{user.plan} · Carteirinha {user.cardNumber}</p></div><span className="status-ok">● {user.genomicStatus}</span></section>
+      <section className="profile-hero" id="overview"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} /><div><span className="eyebrow">Perfil do beneficiário</span><h1>{user.name}</h1><p>{user.plan} · Carteirinha {user.cardNumber}</p></div><span className="status-ok">● {user.genomicStatus}</span></section>
       <section className="metric-grid beneficiary-metrics">
         <article className="metric-card"><span>Genes mapeados</span><strong>{String(user.genes?.length ?? 0).padStart(2, '0')}</strong><small>Painel farmacogenômico</small></article>
         <article className="metric-card"><span>Medicamentos</span><strong>{hasMedication ? '01' : '00'}</strong><small>{hasMedication ? `${user.health?.dosageMg || '—'} mg acompanhados` : 'Nenhum informado'}</small></article>

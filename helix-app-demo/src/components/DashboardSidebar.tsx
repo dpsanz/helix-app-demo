@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import UserAvatar from './UserAvatar'
 
 type SidebarIcon = 'overview' | 'profile' | 'care' | 'patients' | 'refresh' | 'edit' | 'logout'
-type NavItem = { label: string; icon: SidebarIcon; href?: string; onClick?: () => void; active?: boolean }
+type NavItem = { label: string; icon: SidebarIcon; href?: string; onClick?: () => void }
 type Props = {
   userId: string
   name: string
@@ -10,6 +11,7 @@ type Props = {
   role: 'beneficiary' | 'doctor'
   onPrimaryAction: () => void
   onLogout: () => void
+  primaryTargetId?: string
 }
 
 function Icon({ name }: { name: SidebarIcon }) {
@@ -25,33 +27,73 @@ function Icon({ name }: { name: SidebarIcon }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true">{paths[name]}</svg>
 }
 
-export default function DashboardSidebar({ userId, name, photoDataUrl, role, onPrimaryAction, onLogout }: Props) {
+export default function DashboardSidebar({ userId, name, photoDataUrl, role, onPrimaryAction, onLogout, primaryTargetId }: Props) {
   const isDoctor = role === 'doctor'
+  const [activeSection, setActiveSection] = useState('overview')
+  const [workspaceOpen, setWorkspaceOpen] = useState(false)
   const items: NavItem[] = isDoctor
     ? [
-        { label: 'Visão geral', icon: 'overview', href: '#overview', active: true },
+        { label: 'Visão geral', icon: 'overview', href: '#overview' },
         { label: 'Pacientes', icon: 'patients', href: '#patients' },
         { label: 'Atualizar dados', icon: 'refresh', onClick: onPrimaryAction },
       ]
     : [
-        { label: 'Visão geral', icon: 'overview', href: '#overview', active: true },
+        { label: 'Visão geral', icon: 'overview', href: '#overview' },
         { label: 'Minha saúde', icon: 'profile', href: '#health' },
         { label: 'Tratamento', icon: 'care', href: '#treatment' },
         { label: 'Editar perfil', icon: 'edit', onClick: onPrimaryAction },
       ]
 
+  useEffect(() => {
+    const sectionIds = isDoctor ? ['overview', 'patients'] : ['overview', 'health', 'treatment']
+    const updateActiveSection = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+        setActiveSection(sectionIds.at(-1) ?? 'overview')
+        return
+      }
+      const marker = window.innerHeight * .38
+      const visible = sectionIds
+        .map(id => document.getElementById(id))
+        .filter((section): section is HTMLElement => Boolean(section))
+        .filter(section => section.getBoundingClientRect().top <= marker)
+        .at(-1)
+      setActiveSection(visible?.id ?? 'overview')
+    }
+    updateActiveSection()
+    window.addEventListener('scroll', updateActiveSection, { passive: true })
+    window.addEventListener('resize', updateActiveSection)
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection)
+      window.removeEventListener('resize', updateActiveSection)
+    }
+  }, [isDoctor])
+
+  const runPrimaryAction = () => {
+    onPrimaryAction()
+    if (!primaryTargetId) return
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const target = document.getElementById(primaryTargetId) ?? document.querySelector<HTMLElement>(`.${primaryTargetId}`)
+      target?.setAttribute('tabindex', '-1')
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      target?.focus({ preventScroll: true })
+    }))
+  }
+
   return <aside className="topbar dashboard-sidebar" aria-label="Navegação do dashboard">
     <div className="brand pro-brand"><img src="/logo.svg" alt="" /><div className="brand-lockup"><strong>HELIX</strong><span>{isDoctor ? 'PROFISSIONAL' : 'BENEFICIÁRIO'}</span></div></div>
-    <div className="sidebar-workspace">
+    <button className="sidebar-workspace" onClick={() => setWorkspaceOpen(open => !open)} aria-expanded={workspaceOpen} aria-controls="workspace-details">
       <span className="workspace-mark"><Icon name={isDoctor ? 'patients' : 'profile'} /></span>
       <span><strong>{isDoctor ? 'Painel clínico' : 'Meu espaço'}</strong><small>{isDoctor ? 'Área profissional' : 'Plano ativo'}</small></span>
-      <span className="workspace-chevron">⌄</span>
+      <span className="workspace-chevron" aria-hidden="true">⌄</span>
+    </button>
+    <div className={`workspace-menu ${workspaceOpen ? 'open' : ''}`} id="workspace-details">
+      <span>Conta atual</span><strong>{name}</strong><small>ID {userId}</small>
     </div>
     <nav className="sidebar-nav">
       <span className="sidebar-label">NAVEGAÇÃO</span>
       {items.map(item => item.href
-        ? <a key={item.label} className={`sidebar-link ${item.active ? 'active' : ''}`} href={item.href}><Icon name={item.icon} /><span>{item.label}</span></a>
-        : <button key={item.label} className="sidebar-link" onClick={item.onClick}><Icon name={item.icon} /><span>{item.label}</span></button>)}
+        ? <a key={item.label} className={`sidebar-link ${activeSection === item.href.slice(1) ? 'active' : ''}`} href={item.href} onClick={() => setActiveSection(item.href!.slice(1))}><Icon name={item.icon} /><span>{item.label}</span></a>
+        : <button key={item.label} className="sidebar-link" onClick={item.onClick === onPrimaryAction ? runPrimaryAction : item.onClick}><Icon name={item.icon} /><span>{item.label}</span></button>)}
     </nav>
     <div className="sidebar-footer">
       <div className="sidebar-user"><UserAvatar userId={userId} name={name} photoDataUrl={photoDataUrl} size="small" /><span><strong>{name}</strong><small>{isDoctor ? 'Médico cooperado' : 'Beneficiário'}</small></span></div>

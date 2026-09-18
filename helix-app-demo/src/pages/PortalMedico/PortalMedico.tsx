@@ -56,9 +56,9 @@ export default function PortalMedico() {
 
   return <div className="app-shell medical page-enter">
     <DashboardSidebar userId={doctor.id} name={doctor.name} photoDataUrl={doctor.photoDataUrl} role="doctor" onPrimaryAction={load} onLogout={leave} />
-    <main className="dashboard" id="overview">
+    <main className="dashboard">
       <div className="demo-banner">Portal médico local · Novas contas beneficiárias aparecem automaticamente aqui</div>
-      <section className="profile-hero"><UserAvatar userId={doctor.id} name={doctor.name} photoDataUrl={doctor.photoDataUrl} /><div><span className="eyebrow">Médico cooperado</span><h1>{doctor.name}</h1><p>CRM-SP 85442 · Cardiologia</p></div><span className="status-ok">● Cadastro validado</span></section>
+      <section className="profile-hero" id="overview"><UserAvatar userId={doctor.id} name={doctor.name} photoDataUrl={doctor.photoDataUrl} /><div><span className="eyebrow">Médico cooperado</span><h1>{doctor.name}</h1><p>CRM-SP 85442 · Cardiologia</p></div><span className="status-ok">● Cadastro validado</span></section>
       <section className="metric-grid doctor-metrics">
         <article className="metric-card"><span>Pacientes vinculados</span><strong>{patients.length.toString().padStart(2, '0')}</strong><small>Contas neste navegador</small></article>
         <article className="metric-card alert-metric"><span>Alertas genômicos</span><strong>{alertCount.toString().padStart(2, '0')}</strong><small>Pedem atenção</small></article>
