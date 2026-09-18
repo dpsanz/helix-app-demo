@@ -4,6 +4,7 @@ import GeneInsights from '../../components/GeneInsights'
 import MedicationPicker from '../../components/MedicationPicker'
 import TrendChart from '../../components/TrendChart'
 import UserAvatar from '../../components/UserAvatar'
+import DashboardSidebar from '../../components/DashboardSidebar'
 import { ANDRE_GLUCOSE, ANDRE_WEIGHT } from '../../data/medicalKnowledge'
 import { getUser, medicationLabel, updateUser } from '../../data/helixDb'
 import type { HelixUser } from '../../data/helixDb'
@@ -70,8 +71,8 @@ export default function Perfil() {
   const hasDiabetes = user.health?.conditions.some(condition => condition.toLowerCase().includes('diabet')) ?? false
 
   return <div className="app-shell page-enter">
-    <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="" /><div className="brand-lockup"><strong>HELIX</strong><span>BENEFICIÁRIO</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={openEditor}>Editar perfil</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
-    <main className="dashboard">
+    <DashboardSidebar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} role="beneficiary" onPrimaryAction={openEditor} onLogout={leave} />
+    <main className="dashboard" id="overview">
       <div className="demo-banner">Perfil salvo localmente neste navegador · ID {user.id}</div>
       <section className="profile-hero"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} /><div><span className="eyebrow">Perfil do beneficiário</span><h1>{user.name}</h1><p>{user.plan} · Carteirinha {user.cardNumber}</p></div><span className="status-ok">● {user.genomicStatus}</span></section>
       <section className="metric-grid beneficiary-metrics">
@@ -85,8 +86,8 @@ export default function Perfil() {
 
       <div className="dashboard-grid">
         <section className="panel span-full"><div className="section-heading"><div><span className="eyebrow">Farmacogenômica explicada</span><h2>O que seus genes representam</h2></div><span className="muted">{user.genes?.length ?? 0} marcadores analisados</span></div><p className="gene-section-lead">Cada marcador é interpretado junto com seus medicamentos e condições de saúde. Ele não representa um diagnóstico isolado.</p><GeneInsights genes={user.genes} /><div className="kit-card"><div><strong>Kit salivar Helix</strong><p>Perfil integrado ao acompanhamento clínico</p></div><span className="status-ok">{user.genomicStatus}</span></div></section>
-        <section className="panel"><span className="eyebrow">Saúde</span><h2>Contexto informado</h2><div className="profile-facts"><div><small>Condições</small><strong>{user.health?.conditions.join(', ') || 'Não informado'}</strong></div><div><small>Alergias</small><strong>{user.health?.allergies.join(', ') || 'Não informado'}</strong></div><div><small>Contato</small><strong>{user.phone || 'Não informado'}</strong></div></div></section>
-        <section className="panel span-2"><span className="eyebrow">Tratamento</span><h2>Medicamento acompanhado</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? `${user.health?.medicationName || medication} · dose registrada em ${user.health?.dosageMg || '—'} mg` : 'Edite seu perfil para selecionar um medicamento e a dose'}</p></div>{hasMedication && <><span className="status-alert">● Acompanhar</span><button className="primary-btn" onClick={() => setShowCompatibility(true)}>Ver compatibilidade</button></>}</div></section>
+        <section className="panel" id="health"><span className="eyebrow">Saúde</span><h2>Contexto informado</h2><div className="profile-facts"><div><small>Condições</small><strong>{user.health?.conditions.join(', ') || 'Não informado'}</strong></div><div><small>Alergias</small><strong>{user.health?.allergies.join(', ') || 'Não informado'}</strong></div><div><small>Contato</small><strong>{user.phone || 'Não informado'}</strong></div></div></section>
+        <section className="panel span-2" id="treatment"><span className="eyebrow">Tratamento</span><h2>Medicamento acompanhado</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? `${user.health?.medicationName || medication} · dose registrada em ${user.health?.dosageMg || '—'} mg` : 'Edite seu perfil para selecionar um medicamento e a dose'}</p></div>{hasMedication && <><span className="status-alert">● Acompanhar</span><button className="primary-btn" onClick={() => setShowCompatibility(true)}>Ver compatibilidade</button></>}</div></section>
       </div>
     </main>
 

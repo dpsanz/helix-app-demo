@@ -4,6 +4,7 @@ import { getUser, listDoctorPatients, medicationLabel, updateUser } from '../../
 import type { HelixUser, PatientStatus } from '../../data/helixDb'
 import { useAuth } from '../../hooks/useAuth'
 import UserAvatar from '../../components/UserAvatar'
+import DashboardSidebar from '../../components/DashboardSidebar'
 
 type Filter = 'todos' | PatientStatus
 
@@ -54,8 +55,8 @@ export default function PortalMedico() {
   if (!doctor) return <div className="app-loading"><p>Conta médica não encontrada.</p><button className="primary-btn" onClick={leave}>Voltar ao login</button></div>
 
   return <div className="app-shell medical page-enter">
-    <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="Helix" /><div className="brand-lockup"><strong>HELIX</strong><span>PROFISSIONAL</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={load}>Atualizar pacientes</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
-    <main className="dashboard">
+    <DashboardSidebar userId={doctor.id} name={doctor.name} photoDataUrl={doctor.photoDataUrl} role="doctor" onPrimaryAction={load} onLogout={leave} />
+    <main className="dashboard" id="overview">
       <div className="demo-banner">Portal médico local · Novas contas beneficiárias aparecem automaticamente aqui</div>
       <section className="profile-hero"><UserAvatar userId={doctor.id} name={doctor.name} photoDataUrl={doctor.photoDataUrl} /><div><span className="eyebrow">Médico cooperado</span><h1>{doctor.name}</h1><p>CRM-SP 85442 · Cardiologia</p></div><span className="status-ok">● Cadastro validado</span></section>
       <section className="metric-grid doctor-metrics">
@@ -64,7 +65,7 @@ export default function PortalMedico() {
         <article className="metric-card"><span>Compatíveis</span><strong>{patients.filter(patient => patient.patientStatus === 'ok').length.toString().padStart(2, '0')}</strong><small>Sem alertas ativos</small></article>
         <article className="metric-card"><span>Status profissional</span><strong className="metric-text">Validado</strong><small>Cadastro cooperado ativo</small></article>
       </section>
-      <section className="panel"><div className="section-heading"><div><span className="eyebrow">Minha carteira</span><h2>Pacientes vinculados</h2></div><div className="filters">{([['todos','Todos'],['alerta','Alertas'],['ok','OK']] as const).map(([value, label]) => <button key={value} onClick={() => setFilter(value)} className={filter === value ? 'filter-active' : ''}>{label}{value === 'alerta' && ` (${alertCount})`}</button>)}</div></div>
+      <section className="panel" id="patients"><div className="section-heading"><div><span className="eyebrow">Minha carteira</span><h2>Pacientes vinculados</h2></div><div className="filters">{([['todos','Todos'],['alerta','Alertas'],['ok','OK']] as const).map(([value, label]) => <button key={value} onClick={() => setFilter(value)} className={filter === value ? 'filter-active' : ''}>{label}{value === 'alerta' && ` (${alertCount})`}</button>)}</div></div>
         {filtered.length === 0 ? <div className="empty-patients"><span>+</span><strong>{patients.length ? 'Nenhum paciente neste filtro' : 'Nenhum paciente vinculado ainda'}</strong><p>Crie uma conta de beneficiário e ela aparecerá aqui.</p></div> : <div className="patient-list">{filtered.map((patient, index) => <button className="patient-row" key={patient.id} onClick={() => { setSelected(patient); setFeedback('') }}><span className="patient-time">{String(9 + index).padStart(2, '0')}:00</span><UserAvatar userId={patient.id} name={patient.name} photoDataUrl={patient.photoDataUrl} size="small" /><span className="grow patient-name"><strong>{patient.name}</strong><small>{patient.id} · {medicationLabel(patient.health) || 'Sem medicamento'}</small></span><span className={patient.patientStatus === 'alerta' ? 'status-alert' : 'status-ok'}>● {patient.patientStatus === 'alerta' ? 'Alerta' : 'Compatível'}</span><span className="arrow">›</span></button>)}</div>}
       </section>
     </main>
