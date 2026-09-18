@@ -153,6 +153,31 @@ export async function listDoctorPatients(doctorId: string) {
   return users.filter(user => user.role === 'beneficiary').sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
+export async function listAllUsers() {
+  const db = await openDatabase()
+  const users = await requestResult<HelixUser[]>(db.transaction(USERS).objectStore(USERS).getAll())
+  db.close()
+  return users.sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+}
+
+export async function deleteUser(id: string) {
+  if (id === DEMO_DOCTOR_ID) throw new Error('A conta médica do sistema não pode ser excluída.')
+  const db = await openDatabase()
+  await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).delete(id))
+  db.close()
+}
+
+export async function deleteAllBeneficiaries() {
+  const users = await listAllUsers()
+  const beneficiaries = users.filter(user => user.role === 'beneficiary')
+  const db = await openDatabase()
+  for (const user of beneficiaries) {
+    await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).delete(user.id))
+  }
+  db.close()
+  return beneficiaries.length
+}
+
 export function initials(name: string) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase()
 }

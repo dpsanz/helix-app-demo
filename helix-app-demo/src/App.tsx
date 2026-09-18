@@ -3,6 +3,7 @@ import Login from './pages/Auth/Login'
 import Perfil from './pages/Perfil/Perfil'
 import PortalMedico from './pages/PortalMedico/PortalMedico'
 import Cadastro from './pages/Cadastro/Cadastro'
+import Gerenciamento from './pages/Gerenciamento/Gerenciamento'
 import { useAuth } from './hooks/useAuth'
 import './App.css'
 
@@ -14,6 +15,7 @@ function App() {
     <Route path="/perfil" element={isAuthenticated && role === 'beneficiary' ? <Perfil /> : <Navigate to="/" />} />
     <Route path="/portal-medico" element={isAuthenticated && role === 'doctor' ? <PortalMedico /> : <Navigate to="/" />} />
     <Route path="/cadastro" element={<Cadastro />} />
+    <Route path="/gerenciamento" element={<Gerenciamento />} />
     <Route path="*" element={<Navigate to="/" />} />
   </Routes></BrowserRouter>
 }
