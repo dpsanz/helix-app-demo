@@ -220,7 +220,10 @@ export async function deleteAllBeneficiaries() {
 }
 
 export function initials(name: string) {
-  return name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase()
+  const withoutTitle = name.trim().replace(/^(dr\.?|dra\.?|doutor(?:a)?)\s+/i, '')
+  const parts = withoutTitle.split(/\s+/).filter(Boolean)
+  const selected = parts.length > 1 ? [parts[0], parts.at(-1)!] : parts
+  return selected.map(part => part[0]).join('').toUpperCase()
 }
 
 export function medicationLabel(health?: HealthProfile) {

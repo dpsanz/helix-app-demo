@@ -5,6 +5,7 @@ import type { HelixUser, PatientStatus } from '../../data/helixDb'
 import { useAuth } from '../../hooks/useAuth'
 import UserAvatar from '../../components/UserAvatar'
 import DashboardSidebar from '../../components/DashboardSidebar'
+import DoctorAgenda from '../../components/DoctorAgenda'
 
 type Filter = 'todos' | PatientStatus
 
@@ -65,6 +66,7 @@ export default function PortalMedico() {
         <article className="metric-card"><span>Compatíveis</span><strong>{patients.filter(patient => patient.patientStatus === 'ok').length.toString().padStart(2, '0')}</strong><small>Sem alertas ativos</small></article>
         <article className="metric-card"><span>Status profissional</span><strong className="metric-text">Validado</strong><small>Cadastro cooperado ativo</small></article>
       </section>
+      <DoctorAgenda patients={patients} onSelect={patient => { setSelected(patient); setFeedback('') }} />
       <section className="panel" id="patients"><div className="section-heading"><div><span className="eyebrow">Minha carteira</span><h2>Pacientes vinculados</h2></div><div className="filters">{([['todos','Todos'],['alerta','Alertas'],['ok','OK']] as const).map(([value, label]) => <button key={value} onClick={() => setFilter(value)} className={filter === value ? 'filter-active' : ''}>{label}{value === 'alerta' && ` (${alertCount})`}</button>)}</div></div>
         {filtered.length === 0 ? <div className="empty-patients"><span>+</span><strong>{patients.length ? 'Nenhum paciente neste filtro' : 'Nenhum paciente vinculado ainda'}</strong><p>Crie uma conta de beneficiário e ela aparecerá aqui.</p></div> : <div className="patient-list">{filtered.map((patient, index) => <button className="patient-row" key={patient.id} onClick={() => { setSelected(patient); setFeedback('') }}><span className="patient-time">{String(9 + index).padStart(2, '0')}:00</span><UserAvatar userId={patient.id} name={patient.name} photoDataUrl={patient.photoDataUrl} size="small" /><span className="grow patient-name"><strong>{patient.name}</strong><small>{patient.id} · {medicationLabel(patient.health) || 'Sem medicamento'}</small></span><span className={patient.patientStatus === 'alerta' ? 'status-alert' : 'status-ok'}>● {patient.patientStatus === 'alerta' ? 'Alerta' : 'Compatível'}</span><span className="arrow">›</span></button>)}</div>}
       </section>

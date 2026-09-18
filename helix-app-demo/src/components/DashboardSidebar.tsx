@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import UserAvatar from './UserAvatar'
 
-type SidebarIcon = 'overview' | 'profile' | 'care' | 'patients' | 'refresh' | 'edit' | 'logout'
+type SidebarIcon = 'overview' | 'profile' | 'care' | 'patients' | 'calendar' | 'refresh' | 'edit' | 'logout'
 type NavItem = { label: string; icon: SidebarIcon; href?: string; onClick?: () => void }
 type Props = {
   userId: string
@@ -20,6 +20,7 @@ function Icon({ name }: { name: SidebarIcon }) {
     profile: <><circle cx="12" cy="8" r="3.5" /><path d="M5 20c.7-4 3-6 7-6s6.3 2 7 6" /></>,
     care: <><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" /><path d="M8.5 12h2l1-2.2 1.4 4.4 1.1-2.2h1.5" /></>,
     patients: <><circle cx="9" cy="8" r="3" /><path d="M3.5 19c.5-3.5 2.3-5.3 5.5-5.3s5 1.8 5.5 5.3" /><circle cx="17" cy="9" r="2" /><path d="M16 14.3c2.8-.2 4.3 1.4 4.6 4" /></>,
+    calendar: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M7 3v4M17 3v4M3 10h18M8 14h3M14 14h2M8 18h2" /></>,
     refresh: <><path d="M20 7v5h-5" /><path d="M18.5 16a8 8 0 1 1 .8-7.2L20 12" /></>,
     edit: <><path d="m14 5 5 5" /><path d="m4 20 3.5-.7L19 7.8a2 2 0 0 0-2.8-2.8L4.7 16.5 4 20Z" /></>,
     logout: <><path d="M10 5H5v14h5" /><path d="M14 8l4 4-4 4M18 12H9" /></>,
@@ -34,6 +35,7 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
   const items: NavItem[] = isDoctor
     ? [
         { label: 'Visão geral', icon: 'overview', href: '#overview' },
+        { label: 'Agenda', icon: 'calendar', href: '#agenda' },
         { label: 'Pacientes', icon: 'patients', href: '#patients' },
         { label: 'Atualizar dados', icon: 'refresh', onClick: onPrimaryAction },
       ]
@@ -45,7 +47,7 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
       ]
 
   useEffect(() => {
-    const sectionIds = isDoctor ? ['overview', 'patients'] : ['overview', 'health', 'treatment']
+    const sectionIds = isDoctor ? ['overview', 'agenda', 'patients'] : ['overview', 'health', 'treatment']
     const updateActiveSection = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
         setActiveSection(sectionIds.at(-1) ?? 'overview')
