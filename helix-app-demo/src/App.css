@@ -293,7 +293,7 @@
 .gene-row { display: flex; gap: 8px; flex-wrap: wrap; }.gene-chip { color: #b5ffeb; background: rgba(13,158,115,.13); border: 1px solid rgba(13,158,115,.3); border-radius: 999px; padding: 5px 10px; font-family: monospace; font-size: .76rem; }.kit-card,.medication-card { display: flex; align-items: center; gap: 14px; border: 1px solid #27332f; border-radius: 12px; padding: 16px; margin-top: 20px; }.kit-card p,.medication-card p,.timeline p,.modal p { color: #9aa6a1; font-size: .82rem; }.kit-card > .status-ok { margin-left: auto; }
 .status-ok,.status-alert { font-size: .74rem; white-space: nowrap; }.status-ok { color: #76dcbf; }.status-alert { color: #ffb866; }.med-icon { width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center; color: #ffb866; background: rgba(255,184,102,.1); font-weight: 700; }.grow { flex: 1; }.primary-btn,.secondary-btn { padding: 10px 15px; border-radius: 8px; font-size: .8rem; font-weight: 600; }.primary-btn { color: white; background: #1d5d4c; }.primary-btn:hover { background: #0d9e73; }.secondary-btn { border: 1px solid #34443e; color: #d5dcd9; }.full { width: 100%; margin-top: 20px; }
 .timeline { display: grid; gap: 17px; }.timeline-item { display: flex; gap: 12px; }.timeline-item > span { width: 8px; height: 8px; margin-top: 5px; border-radius: 50%; background: #0d9e73; box-shadow: 0 0 0 5px rgba(13,158,115,.1); }.timeline-item small,.timeline-item strong { display: block; }.timeline-item small { color: #65716c; font-size: .65rem; }.timeline-item strong { font-size: .8rem; margin: 2px 0; }
-.filters { display: flex; gap: 7px; }.patient-list { margin-top: 18px; border-top: 1px solid #202b27; }.patient-row { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 8px; border-bottom: 1px solid #202b27; text-align: left; }.patient-row:hover { background: rgba(13,158,115,.04); }.patient-time { color: #77827e; font-size: .75rem; width: 40px; }.patient-name { display: grid; }.patient-name small { color: #78847f; margin-top: 3px; }.arrow { color: #56635e; font-size: 1.5rem; }
+.filters { display: flex; gap: 7px; }.patient-list { margin-top: 18px; border-top: 1px solid #202b27; }.patient-row { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 8px; border-bottom: 1px solid #202b27; text-align: left; }.patient-row:hover { border-color: rgba(168,242,219,.42); }.patient-time { color: #77827e; font-size: .75rem; width: 40px; }.patient-name { display: grid; }.patient-name small { color: #78847f; margin-top: 3px; }.arrow { color: #56635e; font-size: 1.5rem; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 20px; background: rgba(0,0,0,.75); backdrop-filter: blur(6px); }.modal { width: min(500px,100%); max-height: 90vh; overflow: auto; position: relative; background: #111715; border: 1px solid #2a3b35; border-radius: 18px; padding: 28px; box-shadow: 0 30px 80px #000; }.modal.wide { width: min(620px,100%); }.modal-close { position: absolute; top: 16px; right: 18px; color: #89958f; font-size: 1.5rem; }.modal h2 { font-size: 1.7rem; margin: 14px 0 2px; }.modal-lead { margin-bottom: 20px; }.info-block,.recommendation { margin: 18px 0; padding: 15px; border-radius: 10px; background: #0a100e; border: 1px solid #24312c; }.info-block small { display: block; color: #7c8984; margin-bottom: 10px; }.recommendation { border-left: 3px solid #ffb866; }.recommendation strong { display: block; margin-bottom: 5px; }.disclaimer { border-top: 1px solid #27332f; padding-top: 15px; font-size: .7rem !important; }.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }.success-message { color: #b5ffeb; background: rgba(13,158,115,.13); border: 1px solid rgba(13,158,115,.35); border-radius: 10px; padding: 14px; margin-top: 20px; }
 @media (max-width: 800px) { .dashboard-grid { grid-template-columns: 1fr; }.panel.span-2 { grid-column: auto; }.profile-hero { align-items: flex-start; flex-wrap: wrap; }.profile-hero > .status-ok { margin-left: 80px; }.section-heading { align-items: flex-start; flex-direction: column; }.medication-card { flex-wrap: wrap; }.medication-card .primary-btn { width: 100%; }.patient-time { display: none; }.patient-row .status-ok,.patient-row .status-alert { display: none; } }
 @media (max-width: 520px) { .topbar { padding: 0 14px; }.top-actions .ghost-btn:first-child { display: none; }.dashboard { width: min(100% - 24px,1180px); }.panel { padding: 18px; }.filters { width: 100%; }.filters button { flex: 1; padding-inline: 5px; }.modal-actions { flex-direction: column; }.modal-actions button { width: 100%; } }
@@ -380,7 +380,7 @@
 .medication-card { min-height: 90px; background: linear-gradient(90deg, rgba(255,184,102,.06), rgba(0,0,0,.12)); border-color: rgba(255,184,102,.2); }
 .patient-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; padding-top: 18px; border-top: 1px solid #202b27; }
 .patient-row { padding: 16px; border: 1px solid #202b27; background: rgba(0,0,0,.16); }
-.patient-row:hover { border-color: rgba(13,158,115,.55); background: rgba(13,158,115,.07); transform: translateY(-1px); }
+.patient-row:hover { border-color: rgba(168,242,219,.42); }
 
 @media (max-width: 1000px) {
   .beneficiary-metrics { grid-template-columns: repeat(2, 1fr); }
@@ -1066,7 +1066,9 @@
 .plan-option, .chip-group button, .patient-row, .metric-card, .panel,
 .kit-card, .medication-card, .login-input, .signup-fields input,
 .medication-field input, .plan-card-field input, .edit-fields input,
-.modal-close, .signup-login, .doctor-demo-access button {
+.modal-close, .signup-login, .doctor-demo-access button, .gene-insight-card,
+.trend-card, .photo-upload, .remove-photo, .medication-picker input,
+.management-search input, .management-notice button {
   transition:
     color 260ms var(--ease-helix),
     background-color 260ms var(--ease-helix),
@@ -1077,8 +1079,8 @@
 }
 
 button:active:not(:disabled) { transform: scale(.975); }
-.panel:hover, .metric-card:hover { border-color: rgba(168,242,219,.22); transform: translateY(-2px); box-shadow: 0 20px 45px rgba(0,0,0,.2); }
-.patient-row:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.18); }
+.panel:hover, .metric-card:hover { border-color: rgba(168,242,219,.34); }
+.patient-row:hover { border-color: rgba(168,242,219,.42); }
 .modal-backdrop { animation: backdrop-in 240ms ease-out both; }
 .modal { animation: modal-enter 360ms var(--ease-helix) both; transform-origin: center; }
 .dashboard > * { animation: dashboard-item-in 520ms var(--ease-helix) both; }
@@ -1495,7 +1497,7 @@ button:active:not(:disabled) { transform: scale(.975); }
 .gene-section-lead { max-width: 760px; margin: -5px 0 16px; color: #71817b; font-size: .75rem; line-height: 1.6; }
 .gene-insight-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }
 .gene-insight-card { min-height: 142px; box-sizing: border-box; display: flex; flex-direction: column; padding: 14px; background: rgba(0,0,0,.18); border: 1px solid #26352f; border-radius: 8px; transition: 240ms var(--ease-helix); }
-.gene-insight-card:hover { border-color: rgba(20,166,125,.52); transform: translateY(-2px); }
+.gene-insight-card:hover { border-color: rgba(168,242,219,.42); }
 .gene-insight-card > div { display: flex; align-items: center; gap: 8px; }
 .gene-insight-card code { padding: 4px 7px; color: #b5ffeb; background: rgba(20,166,125,.13); border: 1px solid rgba(20,166,125,.28); border-radius: 5px; font: 600 .67rem var(--font-mono); }
 .gene-insight-card span { color: #aebcb7; font-size: .7rem; font-weight: 600; }
@@ -1508,6 +1510,7 @@ button:active:not(:disabled) { transform: scale(.975); }
 .diabetes-lead { margin: -6px 0 15px; color: #71817b; font-size: .72rem; }
 .trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .trend-card { overflow: hidden; padding: 15px; background: rgba(0,0,0,.17); border: 1px solid #26352f; border-radius: 8px; }
+.trend-card:hover { border-color: rgba(168,242,219,.42); }
 .trend-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
 .trend-heading h3 { margin: 3px 0 2px; color: #dce7e3; font-size: .9rem; }
 .trend-heading p { color: #64736d; font-size: .62rem; }
