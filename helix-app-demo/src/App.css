@@ -904,11 +904,8 @@
 .continue-button:disabled { opacity: .35; cursor: not-allowed; }
 .back-button { padding: 10px 2px; color: #71817b; }
 .back-button:hover { color: #d3e1dc; }
-.continue-button svg, .back-button svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; }
-.back-button svg.back { transform: rotate(180deg); }
 .skip-button { width: 100%; margin-top: 9px; color: #50615b; font-size: .58rem; text-align: center; }
 .skip-button:hover { color: #8da29b; }
-.signup-footer { position: relative; z-index: 1; min-height: 45px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px,5vw,76px); color: #3f4c48; border-top: 1px solid rgba(255,255,255,.05); font-size: .54rem; letter-spacing: .04em; }
 @media (max-width: 900px) {
   .signup-wrap { width: min(590px, calc(100% - 36px)); grid-template-columns: 1fr; gap: 34px; padding-top: 36px; }
   .signup-intro { text-align: center; }
@@ -939,17 +936,13 @@
   .plan-option { padding: 10px; }
   .plan-copy strong em { display: none; }
   .plan-option b { max-width: 75px; text-align: right; }
-  .signup-footer { padding: 12px 18px; gap: 10px; }
 }
 
 /* Superfícies e formulários compartilhados */
 .login-page {
   background:
-    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
-    radial-gradient(circle at 50% 45%, rgba(20,166,125,.14), transparent 34%),
-    #060908;
-  background-size: 64px 64px, 64px 64px, auto, auto;
+    radial-gradient(circle at 50% 48%, rgba(13, 158, 115, .14), transparent 34%),
+    #050506;
 }
 .login-page::before { opacity: .55; }
 .login-card {
@@ -1017,7 +1010,7 @@
 .signup-fields label span, .medication-field span, .chip-group > span,
 .plan-card-field span, .plan-id > span, .plan-id small, .plan-copy small,
 .plan-copy strong em, .plan-option b, .consent-card p, .privacy-list li,
-.consent-check > span, .skip-button, .signup-footer, .login-storage-note,
+.consent-check > span, .skip-button, .login-storage-note,
 .doctor-demo-access, .profile-facts small, .patient-detail-grid small {
   font-size: .6875rem;
   line-height: 1.5;
@@ -1109,8 +1102,17 @@ button:active:not(:disabled) { transform: scale(.975); }
 .signup-page, .login-page {
   min-height: 100vh;
   min-height: 100dvh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: visible;
+}
+
+.login-page::before {
+  inset: 0;
+  width: auto;
+  height: auto;
+  transform: none;
+  background: linear-gradient(121deg, transparent 30%, rgba(13,158,115,.05) 42%, rgba(181,255,235,.2) 50%, rgba(13,158,115,.05) 58%, transparent 70%);
+  filter: blur(18px);
+  opacity: .72;
 }
 
 .signup-nav, .auth-nav {
@@ -1127,7 +1129,7 @@ button:active:not(:disabled) { transform: scale(.975); }
 }
 
 .signup-wrap {
-  min-height: calc(100dvh - 117px);
+  min-height: 0;
   box-sizing: border-box;
   padding-top: clamp(18px, 3vh, 34px);
   padding-bottom: clamp(18px, 3vh, 34px);
@@ -1142,7 +1144,7 @@ button:active:not(:disabled) { transform: scale(.975); }
 .auth-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(24px, 5vw, 76px); }
 .auth-create-link { color: #74847e; font-size: .75rem; text-decoration: none; }
 .auth-create-link span { margin-left: 7px; color: #a8f2db; font-weight: 600; }
-.login-layout { position: relative; z-index: 1; flex: 1; width: min(1120px, calc(100% - 48px)); min-height: calc(100dvh - 117px); margin: 0 auto; padding: clamp(22px, 4vh, 46px) 0; box-sizing: border-box; display: grid; grid-template-columns: minmax(320px, .92fr) minmax(400px, .78fr); align-items: center; gap: clamp(55px, 9vw, 130px); }
+.login-layout { position: relative; z-index: 1; flex: 1; width: min(1120px, calc(100% - 48px)); min-height: 0; margin: 0 auto; padding: clamp(22px, 4vh, 46px) 0; box-sizing: border-box; display: grid; grid-template-columns: minmax(320px, .92fr) minmax(400px, .78fr); align-items: center; gap: clamp(55px, 9vw, 130px); }
 .login-context .signup-kicker { margin-bottom: 22px; }
 .login-context h1 { margin: 0; color: #f2f8f5; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.7rem, 4.5vw, 4.45rem); font-weight: 400; line-height: 1.02; letter-spacing: -.045em; }
 .login-context h1 em { color: #a8f2db; font-weight: 400; }
@@ -1163,9 +1165,9 @@ button:active:not(:disabled) { transform: scale(.975); }
 .login-form label { display: grid; gap: 7px; }
 .login-form label > span { color: #83918c; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
 .login-input { width: 100%; min-height: 46px; box-sizing: border-box; padding: 10px 13px; color: #e3ede9; }
-.login-submit { min-height: 46px; display: flex; align-items: center; justify-content: center; gap: 10px; color: #06110d; background: #a8f2db; border-radius: 8px; font-size: .8rem; font-weight: 700; transition: all 260ms var(--ease-helix); }
-.login-submit:hover:not(:disabled) { background: #c9ffef; transform: translateY(-1px); box-shadow: 0 10px 28px rgba(20,166,125,.2); }
-.login-submit span { font-size: 1rem; }
+.login-submit { min-height: 46px; display: flex; align-items: center; justify-content: center; color: #06110d; background: linear-gradient(135deg, #9debd3, #b5f5e1); border: 1px solid rgba(181,255,235,.65); border-radius: 8px; font-size: .8rem; font-weight: 700; box-shadow: 0 5px 18px rgba(20,166,125,.1); transition: transform 320ms var(--ease-helix), box-shadow 320ms var(--ease-helix), background 320ms var(--ease-helix), border-color 320ms var(--ease-helix); }
+.login-submit:hover:not(:disabled) { background: linear-gradient(135deg, #b3f6e2, #d0fff0); border-color: #d0fff0; transform: translateY(-2px); box-shadow: 0 14px 34px rgba(20,166,125,.24); }
+.login-submit:active:not(:disabled) { transform: translateY(0) scale(.985); box-shadow: 0 5px 14px rgba(20,166,125,.14); transition-duration: 100ms; }
 .login-security { margin-top: 20px; padding-top: 18px; display: flex; gap: 11px; border-top: 1px solid rgba(255,255,255,.07); }
 .login-security svg { width: 25px; height: 25px; flex: 0 0 auto; fill: none; stroke: #5cc4a6; stroke-width: 1.5; }
 .login-security p { color: #60716b; font-size: .68rem; line-height: 1.55; }
@@ -1173,8 +1175,8 @@ button:active:not(:disabled) { transform: scale(.975); }
 
 @media (min-width: 901px) and (max-height: 820px) {
   .signup-nav, .auth-nav { height: 62px; flex-basis: 62px; }
-  .signup-footer { min-height: 38px; }
-  .signup-wrap, .login-layout { min-height: calc(100dvh - 100px); padding-top: 14px; padding-bottom: 14px; }
+  .site-footer { min-height: 38px; flex-basis: 38px; }
+  .signup-wrap, .login-layout { min-height: 0; padding-top: 14px; padding-bottom: 14px; }
   .signup-card-head { height: 60px; }
   .stepper { margin-top: 18px; margin-bottom: 19px; }
   .signup-content { min-height: 350px; }
@@ -1200,8 +1202,153 @@ button:active:not(:disabled) { transform: scale(.975); }
   .signup-nav, .auth-nav { height: 64px; flex-basis: 64px; padding: 0 18px; }
   .auth-create-link { font-size: 0; }
   .auth-create-link span { font-size: .72rem; }
-  .signup-wrap { min-height: calc(100dvh - 109px); }
-  .login-layout { min-height: calc(100dvh - 109px); width: calc(100% - 24px); padding: 18px 0; }
+  .signup-wrap { min-height: 0; }
+  .login-layout { min-height: 0; width: calc(100% - 24px); padding: 18px 0; }
   .login-card { padding: 24px 20px; }
   .signup-card { min-height: 0; }
+}
+
+/* Footer é um bloco independente ao fim do fluxo, sem altura calculada */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 45px;
+  width: 100%;
+  min-height: 45px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(24px, 5vw, 76px);
+  color: #53615c;
+  background: rgba(6,9,8,.78);
+  border-top: 1px solid rgba(255,255,255,.06);
+  font-size: .6875rem;
+  letter-spacing: .03em;
+}
+.site-footer nav { display: flex; align-items: center; gap: 18px; }
+.site-footer a { color: inherit; text-decoration: none; transition: color 240ms var(--ease-helix); }
+.site-footer a:hover { color: #9ce8d1; }
+
+/* Todos os botões usam a mesma resposta elástica e previsível */
+.access-option, .continue-button, .back-button, .primary-btn, .secondary-btn,
+.ghost-btn, .filters button, .chip-group button, .plan-option, .doctor-demo-access button {
+  transition:
+    transform 320ms var(--ease-helix),
+    color 320ms var(--ease-helix),
+    background-color 320ms var(--ease-helix),
+    border-color 320ms var(--ease-helix),
+    box-shadow 320ms var(--ease-helix),
+    opacity 320ms var(--ease-helix);
+}
+.access-option:hover:not(:disabled), .continue-button:hover:not(:disabled),
+.primary-btn:hover:not(:disabled), .secondary-btn:hover:not(:disabled),
+.ghost-btn:hover:not(:disabled), .filters button:hover:not(:disabled),
+.plan-option:hover:not(:disabled) { transform: translateY(-2px); }
+.access-option:active:not(:disabled), .continue-button:active:not(:disabled),
+.primary-btn:active:not(:disabled), .secondary-btn:active:not(:disabled),
+.ghost-btn:active:not(:disabled), .filters button:active:not(:disabled),
+.chip-group button:active:not(:disabled), .plan-option:active:not(:disabled) {
+  transform: translateY(0) scale(.985);
+  transition-duration: 100ms;
+}
+
+@media (max-width: 560px) {
+  .site-footer { min-height: 52px; flex-basis: 52px; padding: 9px 18px; gap: 10px; }
+  .site-footer nav { gap: 10px; }
+}
+
+/* Cadastro ocupa exatamente a viewport: sem scroll e sem área após o footer */
+.signup-page {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+.signup-page .signup-nav { height: 64px; flex-basis: 64px; }
+.signup-page .signup-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+}
+.signup-page .signup-card {
+  max-height: 100%;
+  box-sizing: border-box;
+}
+.signup-page .signup-content { min-height: 0; }
+.signup-page .site-footer { min-height: 38px; flex-basis: 38px; }
+
+@media (min-width: 901px) and (max-height: 900px) {
+  .signup-page .signup-card-head { height: 58px; }
+  .signup-page .stepper { margin-top: 14px; margin-bottom: 16px; }
+  .signup-page .content-heading { margin-bottom: 14px; }
+  .signup-page .content-heading h2 { margin-top: 4px; }
+  .signup-page .signup-fields { gap: 10px 12px; }
+  .signup-page .signup-fields input,
+  .signup-page .medication-field input,
+  .signup-page .plan-card-field input { min-height: 38px; padding-top: 8px; padding-bottom: 8px; }
+  .signup-page .signup-actions { min-height: 36px; margin-top: 12px; }
+  .signup-page .continue-button { padding-top: 9px; padding-bottom: 9px; }
+  .signup-page .chip-group { margin-bottom: 11px; }
+  .signup-page .medication-field { margin-bottom: 11px; }
+}
+
+@media (max-width: 900px) {
+  .signup-page { height: auto; min-height: 100dvh; overflow: visible; }
+  .signup-page .signup-wrap { overflow: visible; padding-top: 24px; padding-bottom: 24px; }
+}
+
+@media (max-width: 560px) {
+  .signup-page .site-footer { min-height: 52px; flex-basis: 52px; }
+}
+
+/* Refinamento do card de cadastro */
+@media (min-width: 561px) {
+  .signup-page .signup-card { padding-right: 24px; padding-left: 24px; }
+  .signup-page .signup-card-head { margin-right: -24px; margin-left: -24px; padding-right: 24px; padding-left: 24px; }
+}
+
+.signup-page .signup-card-head {
+  position: relative;
+  background: linear-gradient(105deg, rgba(20,166,125,.16), rgba(20,166,125,.045) 66%, transparent);
+  border-bottom-color: rgba(168,242,219,.14);
+}
+.signup-page .signup-card-head > div {
+  position: relative;
+  gap: 5px;
+}
+.signup-page .signup-card-head div span {
+  color: #e1ece8;
+  font-family: var(--font-sans);
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+.signup-page .signup-card-head div strong {
+  color: #70a698;
+  font-size: .65rem;
+  letter-spacing: .11em;
+}
+.signup-page .step-count {
+  padding: 7px 10px;
+  color: #abf2dc;
+  background: rgba(0,0,0,.16);
+  border: 1px solid rgba(168,242,219,.1);
+  border-radius: 7px;
+  font-size: .9rem;
+}
+
+@media (min-width: 901px) {
+  .signup-page .signup-wrap {
+    grid-template-columns: minmax(0, 1fr) 500px;
+  }
+  .signup-page .signup-card {
+    width: 500px;
+    max-width: 500px;
+    justify-self: end;
+  }
 }

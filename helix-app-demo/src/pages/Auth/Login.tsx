@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { authenticate } from '../../data/helixDb'
 import { useAuth } from '../../hooks/useAuth'
 import type { AccessRole } from '../../hooks/useAuth'
+import SiteFooter from '../../components/SiteFooter'
 
 function ShieldIcon() {
   return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5.5 5.8v5.5c0 4.1 2.7 7.8 6.5 9.2 3.8-1.4 6.5-5.1 6.5-9.2V5.8L12 3Z" /><path d="m9.2 12 1.8 1.8 4-4" /></svg>
@@ -62,12 +63,12 @@ export default function Login() {
           <label><span>CPF ou e-mail</span><input type="text" value={cpfEmail} onChange={event => setCpfEmail(event.target.value)} className="login-input" placeholder="voce@email.com" autoComplete="username" required /></label>
           <label><span>Senha</span><input type="password" value={senha} onChange={event => setSenha(event.target.value)} className="login-input" placeholder="••••••••" autoComplete="current-password" required /></label>
           {error && <p className="auth-error" role="alert">{error}</p>}
-          <button type="submit" disabled={loading} className="login-submit">{loading ? 'Entrando…' : 'Entrar'}<span>→</span></button>
+          <button type="submit" disabled={loading} className="login-submit">{loading ? 'Entrando…' : 'Entrar'}</button>
         </form>
         {role === 'doctor' && <div className="doctor-demo-access"><span>Acesso médico demonstrativo</span><button type="button" onClick={() => { setCpfEmail('medico@helix.com'); setSenha('medico123') }}>Usar credenciais</button></div>}
         <div className="login-security"><ShieldIcon /><p><strong>Sessão protegida</strong>Suas informações permanecem vinculadas somente a este navegador.</p></div>
       </div>
     </section>
-    <footer className="signup-footer"><span>© 2026 Helix Saúde</span><span>Privacidade · Termos · Segurança</span></footer>
+    <SiteFooter />
   </main>
 }

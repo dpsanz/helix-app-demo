@@ -76,6 +76,9 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #246d59 #070b09;
 }
 
 #root { min-height: 100vh; }
@@ -90,6 +93,12 @@ button:disabled { cursor: not-allowed; }
 }
 
 ::selection { color: #04100c; background: #8fe2ca; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #070b09; }
+::-webkit-scrollbar-thumb { background: #246d59; border: 2px solid #070b09; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #36a383; }
+::-webkit-scrollbar-corner { background: #070b09; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
