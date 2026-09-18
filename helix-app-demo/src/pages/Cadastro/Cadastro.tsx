@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { createBeneficiary } from '../../data/helixDb'
@@ -49,6 +49,8 @@ export default function Cadastro() {
   const [saving, setSaving] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   const toggle = (group: string, item: string) => {
     setSelected(current => {
@@ -110,8 +112,8 @@ export default function Cadastro() {
       <section className="signup-wrap">
         <div className="signup-intro">
           <span className="signup-kicker">02 — CRIAÇÃO DE CONTA · BENEFICIÁRIO</span>
-          <h1>Seu cuidado começa<br /><em>com você.</em></h1>
-          <p>Crie seu perfil e transforme suas informações em um cuidado mais preciso, seguro e pessoal.</p>
+          <h1>Crie seu perfil<br /><em>genômico.</em></h1>
+          <p>Reúna seus dados de saúde, medicamentos e resultados farmacogenômicos em um único perfil protegido.</p>
           <div className="signup-trust">
             <span className="trust-icon">⌁</span>
             <div><strong>Seus dados protegidos</strong><small>Criptografia de ponta a ponta e total conformidade com a LGPD.</small></div>

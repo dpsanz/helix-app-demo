@@ -1,8 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { authenticate } from '../../data/helixDb'
 import { useAuth } from '../../hooks/useAuth'
 import type { AccessRole } from '../../hooks/useAuth'
+
+function ShieldIcon() {
+  return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5.5 5.8v5.5c0 4.1 2.7 7.8 6.5 9.2 3.8-1.4 6.5-5.1 6.5-9.2V5.8L12 3Z" /><path d="m9.2 12 1.8 1.8 4-4" /></svg>
+}
 
 export default function Login() {
   const [cpfEmail, setCpfEmail] = useState('')
@@ -12,6 +16,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
@@ -28,24 +34,40 @@ export default function Login() {
     }
   }
 
-  return <div className="login-page page-enter min-h-screen flex items-center justify-center px-4">
-    <div className="login-card ui-card w-full max-w-sm rounded-2xl p-8">
-      <div className="login-brand"><img src="/logo.svg" alt="" /><strong></strong></div>
-      <h1 className="text-lg font-semibold mb-1 text-center">Bem-vindo de volta</h1>
-      <p className="text-sm text-neutral-400 mb-5 text-center">Acesse sua conta Helix</p>
-      <div className="grid grid-cols-2 gap-2 mb-5" role="group" aria-label="Tipo de acesso">
-        <button type="button" onClick={() => { setRole('beneficiary'); setError('') }} className={`access-option ${role === 'beneficiary' ? 'access-option-active' : ''}`}>Beneficiário</button>
-        <button type="button" onClick={() => { setRole('doctor'); setError('') }} className={`access-option ${role === 'doctor' ? 'access-option-active' : ''}`}>Médico cooperado</button>
+  return <main className="login-page page-enter">
+    <header className="auth-nav">
+      <Link to="/" className="signup-brand" aria-label="Helix — início"><img src="/logo.svg" alt="" /><div><strong>HELIX</strong></div></Link>
+      <Link to="/cadastro" className="auth-create-link">Não possui uma conta? <span>Criar perfil</span></Link>
+    </header>
+
+    <section className="login-layout">
+      <aside className="login-context">
+        <span className="signup-kicker">PLATAFORMA GENÔMICA · ACESSO SEGURO</span>
+        <h1>Seu perfil de saúde,<br /><em>em um só lugar.</em></h1>
+        <p>Acesse informações farmacogenômicas, medicamentos acompanhados e o histórico compartilhado com seu médico.</p>
+        <div className="login-feature-list">
+          <div><span>01</span><p><strong>Dados centralizados</strong>Perfil clínico e genômico organizados para consulta.</p></div>
+          <div><span>02</span><p><strong>Acompanhamento conectado</strong>As atualizações ficam disponíveis ao médico vinculado.</p></div>
+          <div><span>03</span><p><strong>Armazenamento local</strong>Esta demonstração mantém suas contas neste navegador.</p></div>
+        </div>
+      </aside>
+
+      <div className="login-card ui-card">
+        <div className="login-card-heading"><div className="login-brand"><img src="/logo.svg" alt="" /></div><span>Acesso à plataforma</span><h2>Bem-vindo de volta</h2><p>Entre com as credenciais do seu perfil.</p></div>
+        <div className="login-role-tabs" role="group" aria-label="Tipo de acesso">
+          <button type="button" onClick={() => { setRole('beneficiary'); setError('') }} className={`access-option ${role === 'beneficiary' ? 'access-option-active' : ''}`}>Beneficiário</button>
+          <button type="button" onClick={() => { setRole('doctor'); setError('') }} className={`access-option ${role === 'doctor' ? 'access-option-active' : ''}`}>Médico cooperado</button>
+        </div>
+        <form onSubmit={handleSubmit} className="login-form">
+          <label><span>CPF ou e-mail</span><input type="text" value={cpfEmail} onChange={event => setCpfEmail(event.target.value)} className="login-input" placeholder="voce@email.com" autoComplete="username" required /></label>
+          <label><span>Senha</span><input type="password" value={senha} onChange={event => setSenha(event.target.value)} className="login-input" placeholder="••••••••" autoComplete="current-password" required /></label>
+          {error && <p className="auth-error" role="alert">{error}</p>}
+          <button type="submit" disabled={loading} className="login-submit">{loading ? 'Entrando…' : 'Entrar'}<span>→</span></button>
+        </form>
+        {role === 'doctor' && <div className="doctor-demo-access"><span>Acesso médico demonstrativo</span><button type="button" onClick={() => { setCpfEmail('medico@helix.com'); setSenha('medico123') }}>Usar credenciais</button></div>}
+        <div className="login-security"><ShieldIcon /><p><strong>Sessão protegida</strong>Suas informações permanecem vinculadas somente a este navegador.</p></div>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div><label className="text-xs text-neutral-400 mb-1 block">CPF ou e-mail</label><input type="text" value={cpfEmail} onChange={event => setCpfEmail(event.target.value)} className="login-input w-full border rounded-lg px-3 py-2 text-sm focus:outline-none" placeholder="voce@email.com" autoComplete="username" required /></div>
-        <div><label className="text-xs text-neutral-400 mb-1 block">Senha</label><input type="password" value={senha} onChange={event => setSenha(event.target.value)} className="login-input w-full border rounded-lg px-3 py-2 text-sm focus:outline-none" placeholder="••••••••" autoComplete="current-password" required /></div>
-        {error && <p className="auth-error" role="alert">{error}</p>}
-        <button type="submit" disabled={loading} className="helix-button-hover w-full bg-helix-green hover:bg-helix-lightgreen text-white font-medium py-2 rounded-lg">{loading ? 'Entrando…' : 'Entrar'}</button>
-      </form>
-      {role === 'doctor' && <div className="doctor-demo-access"><span>Acesso médico demonstrativo</span><button type="button" onClick={() => { setCpfEmail('medico@helix.com'); setSenha('medico123') }}>Preencher credenciais</button></div>}
-      <p className="text-center text-sm text-neutral-400 mt-6">Ainda não tem conta? <Link to="/cadastro" className="text-helix-lightgreen hover:underline">Criar conta</Link></p>
-      <p className="login-storage-note">Contas e perfis ficam salvos com segurança local neste navegador.</p>
-    </div>
-  </div>
+    </section>
+    <footer className="signup-footer"><span>© 2026 Helix Saúde</span><span>Privacidade · Termos · Segurança</span></footer>
+  </main>
 }
