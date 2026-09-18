@@ -55,7 +55,7 @@ export default function Cadastro() {
       const user = await createBeneficiary({
         name: form.name.trim(), cpf: form.cpf, email: form.email.trim(), password: form.password,
         phone: form.phone, birth: form.birth, cardNumber: form.cardNumber || 'Aguardando validação', plan: selectedPlan,
-        health: { conditions: selected.conditions, allergies: selected.allergies, familyHistory: selected.family, medication: form.medication },
+        health: { conditions: selected.conditions, allergies: selected.allergies, familyHistory: selected.family, medication: `${form.medicationName}${form.dosageMg ? ` ${form.dosageMg} mg` : ''}`.trim(), medicationName: form.medicationName, dosageMg: form.dosageMg },
       })
       login(user.id, 'beneficiary')
       navigate('/perfil')

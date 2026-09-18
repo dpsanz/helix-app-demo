@@ -1,15 +1,33 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getUser, initials, updateUser } from '../../data/helixDb'
+import GeneInsights from '../../components/GeneInsights'
+import MedicationPicker from '../../components/MedicationPicker'
+import TrendChart from '../../components/TrendChart'
+import UserAvatar from '../../components/UserAvatar'
+import { ANDRE_GLUCOSE, ANDRE_WEIGHT } from '../../data/medicalKnowledge'
+import { getUser, medicationLabel, updateUser } from '../../data/helixDb'
 import type { HelixUser } from '../../data/helixDb'
 import { useAuth } from '../../hooks/useAuth'
+
+type Draft = { phone: string; medicationName: string; dosageMg: string; photoDataUrl: string }
+
+function draftFromUser(user: HelixUser): Draft {
+  const legacy = user.health?.medication.match(/^(.+?)\s+([\d.]+)\s*mg$/i)
+  return {
+    phone: user.phone ?? '',
+    medicationName: user.health?.medicationName ?? legacy?.[1] ?? user.health?.medication ?? '',
+    dosageMg: user.health?.dosageMg ?? legacy?.[2] ?? '',
+    photoDataUrl: user.photoDataUrl ?? '',
+  }
+}
 
 export default function Perfil() {
   const [user, setUser] = useState<HelixUser | null>(null)
   const [loading, setLoading] = useState(true)
   const [showCompatibility, setShowCompatibility] = useState(false)
   const [editing, setEditing] = useState(false)
-  const [draft, setDraft] = useState({ phone: '', medication: '' })
+  const [draft, setDraft] = useState<Draft>({ phone: '', medicationName: '', dosageMg: '', photoDataUrl: '' })
+  const [photoError, setPhotoError] = useState('')
   const { logout, userId } = useAuth()
   const navigate = useNavigate()
 
@@ -17,46 +35,62 @@ export default function Perfil() {
     if (!userId) return
     getUser(userId).then(profile => {
       setUser(profile)
-      if (profile) setDraft({ phone: profile.phone ?? '', medication: profile.health?.medication ?? '' })
+      if (profile) setDraft(draftFromUser(profile))
     }).finally(() => setLoading(false))
   }, [userId])
 
   const leave = () => { logout(); navigate('/') }
+  const openEditor = () => { if (user) setDraft(draftFromUser(user)); setPhotoError(''); setEditing(true) }
   const saveProfile = async () => {
     if (!user) return
+    const medication = `${draft.medicationName}${draft.dosageMg ? ` ${draft.dosageMg} mg` : ''}`.trim()
     const updated = await updateUser(user.id, {
       phone: draft.phone,
-      health: { conditions: user.health?.conditions ?? [], allergies: user.health?.allergies ?? [], familyHistory: user.health?.familyHistory ?? [], medication: draft.medication },
-      patientStatus: draft.medication ? 'alerta' : 'ok',
+      photoDataUrl: draft.photoDataUrl,
+      health: { conditions: user.health?.conditions ?? [], allergies: user.health?.allergies ?? [], familyHistory: user.health?.familyHistory ?? [], medication, medicationName: draft.medicationName, dosageMg: draft.dosageMg },
+      patientStatus: medication ? 'alerta' : 'ok',
     })
     setUser(updated); setEditing(false)
+  }
+
+  const selectPhoto = (file?: File) => {
+    if (!file) return
+    if (!file.type.startsWith('image/')) { setPhotoError('Selecione um arquivo de imagem.'); return }
+    if (file.size > 2 * 1024 * 1024) { setPhotoError('A foto deve ter no máximo 2 MB.'); return }
+    const reader = new FileReader()
+    reader.onload = () => { setDraft(current => ({ ...current, photoDataUrl: String(reader.result) })); setPhotoError('') }
+    reader.readAsDataURL(file)
   }
 
   if (loading) return <div className="app-loading"><img src="/logo.svg" alt="" /><span>Carregando seu perfil…</span></div>
   if (!user) return <div className="app-loading"><p>Perfil não encontrado neste navegador.</p><button className="primary-btn" onClick={leave}>Voltar ao login</button></div>
 
-  const medication = user.health?.medication || 'Nenhum medicamento informado'
-  const hasMedication = Boolean(user.health?.medication)
+  const medication = medicationLabel(user.health) || 'Nenhum medicamento informado'
+  const hasMedication = Boolean(medicationLabel(user.health))
+  const hasDiabetes = user.health?.conditions.some(condition => condition.toLowerCase().includes('diabet')) ?? false
 
   return <div className="app-shell page-enter">
-    <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="" /><div className="brand-lockup"><strong>HELIX</strong><span>BENEFICIÁRIO</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={() => setEditing(true)}>Editar perfil</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
+    <header className="topbar"><div className="brand pro-brand"><img src="/logo.svg" alt="" /><div className="brand-lockup"><strong>HELIX</strong><span>BENEFICIÁRIO</span></div></div><div className="top-actions"><button className="ghost-btn" onClick={openEditor}>Editar perfil</button><button className="ghost-btn" onClick={leave}>Sair</button></div></header>
     <main className="dashboard">
       <div className="demo-banner">Perfil salvo localmente neste navegador · ID {user.id}</div>
-      <section className="profile-hero"><div className="avatar">{initials(user.name)}</div><div><span className="eyebrow">Perfil do beneficiário</span><h1>{user.name}</h1><p>{user.plan} · Carteirinha {user.cardNumber}</p></div><span className="status-ok">● {user.genomicStatus}</span></section>
+      <section className="profile-hero"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} /><div><span className="eyebrow">Perfil do beneficiário</span><h1>{user.name}</h1><p>{user.plan} · Carteirinha {user.cardNumber}</p></div><span className="status-ok">● {user.genomicStatus}</span></section>
       <section className="metric-grid beneficiary-metrics">
         <article className="metric-card"><span>Genes mapeados</span><strong>{String(user.genes?.length ?? 0).padStart(2, '0')}</strong><small>Painel farmacogenômico</small></article>
-        <article className="metric-card"><span>Medicamentos</span><strong>{hasMedication ? '01' : '00'}</strong><small>Em acompanhamento</small></article>
+        <article className="metric-card"><span>Medicamentos</span><strong>{hasMedication ? '01' : '00'}</strong><small>{hasMedication ? `${user.health?.dosageMg || '—'} mg acompanhados` : 'Nenhum informado'}</small></article>
         <article className={`metric-card ${hasMedication ? 'alert-metric' : ''}`}><span>Pontos de atenção</span><strong>{hasMedication ? '01' : '00'}</strong><small>{hasMedication ? 'Revisão recomendada' : 'Nenhum alerta'}</small></article>
-        <article className="metric-card"><span>Status da análise</span><strong className="metric-text">Em preparo</strong><small>Cadastro concluído</small></article>
+        <article className="metric-card"><span>Status da análise</span><strong className="metric-text">{user.genomicStatus?.includes('ativo') ? 'Ativo' : 'Em preparo'}</strong><small>Perfil atualizado</small></article>
       </section>
+
+      {hasDiabetes && <section className="diabetes-overview panel"><div className="section-heading"><div><span className="eyebrow">Acompanhamento adaptativo</span><h2>Controle metabólico</h2></div><span className="diabetes-badge">Diabetes · acompanhamento ativo</span></div><p className="diabetes-lead">Indicadores demonstrativos organizados a partir do contexto de saúde informado.</p><div className="trend-grid"><TrendChart title="Glicemia" description="Média dos registros em jejum" data={ANDRE_GLUCOSE} unit="mg/dL" targetLabel="Meta: 80–130 mg/dL" /><TrendChart title="Peso" description="Evolução nos últimos cinco meses" data={ANDRE_WEIGHT} unit="kg" targetLabel="Tendência: −4,4 kg" /></div></section>}
+
       <div className="dashboard-grid">
-        <section className="panel span-2"><div className="section-heading"><div><span className="eyebrow">Farmacogenômica</span><h2>Meu perfil genômico</h2></div><span className="muted">{user.email}</span></div><div className="gene-row">{user.genes?.map(gene => <span className="gene-chip" key={gene}>{gene}</span>)}</div><div className="kit-card"><div><strong>Kit salivar Helix</strong><p>Solicitação criada junto com o cadastro</p></div><span className="status-ok">Aguardando coleta</span></div></section>
+        <section className="panel span-full"><div className="section-heading"><div><span className="eyebrow">Farmacogenômica explicada</span><h2>O que seus genes representam</h2></div><span className="muted">{user.genes?.length ?? 0} marcadores analisados</span></div><p className="gene-section-lead">Cada marcador é interpretado junto com seus medicamentos e condições de saúde. Ele não representa um diagnóstico isolado.</p><GeneInsights genes={user.genes} /><div className="kit-card"><div><strong>Kit salivar Helix</strong><p>Perfil integrado ao acompanhamento clínico</p></div><span className="status-ok">{user.genomicStatus}</span></div></section>
         <section className="panel"><span className="eyebrow">Saúde</span><h2>Contexto informado</h2><div className="profile-facts"><div><small>Condições</small><strong>{user.health?.conditions.join(', ') || 'Não informado'}</strong></div><div><small>Alergias</small><strong>{user.health?.allergies.join(', ') || 'Não informado'}</strong></div><div><small>Contato</small><strong>{user.phone || 'Não informado'}</strong></div></div></section>
-        <section className="panel span-2"><span className="eyebrow">Tratamento</span><h2>Meus medicamentos</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? 'Acompanhamento farmacogenômico disponível' : 'Edite seu perfil para adicionar um medicamento'}</p></div>{hasMedication && <><span className="status-alert">● Atenção</span><button className="primary-btn" onClick={() => setShowCompatibility(true)}>Ver compatibilidade</button></>}</div></section>
+        <section className="panel span-2"><span className="eyebrow">Tratamento</span><h2>Medicamento acompanhado</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? `${user.health?.medicationName || medication} · dose registrada em ${user.health?.dosageMg || '—'} mg` : 'Edite seu perfil para selecionar um medicamento e a dose'}</p></div>{hasMedication && <><span className="status-alert">● Acompanhar</span><button className="primary-btn" onClick={() => setShowCompatibility(true)}>Ver compatibilidade</button></>}</div></section>
       </div>
     </main>
 
-    {editing && <div className="modal-backdrop" onMouseDown={() => setEditing(false)}><section className="modal" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setEditing(false)}>×</button><span className="eyebrow">Dados persistentes</span><h2>Editar perfil</h2><p className="modal-lead">As alterações também aparecerão para o médico vinculado.</p><div className="edit-fields"><label><span>Celular</span><input value={draft.phone} onChange={event => setDraft({ ...draft, phone: event.target.value })} /></label><label><span>Medicamento em uso</span><input value={draft.medication} onChange={event => setDraft({ ...draft, medication: event.target.value })} placeholder="Ex.: Losartana 50 mg" /></label></div><div className="modal-actions"><button className="secondary-btn" onClick={() => setEditing(false)}>Cancelar</button><button className="primary-btn" onClick={saveProfile}>Salvar alterações</button></div></section></div>}
-    {showCompatibility && <div className="modal-backdrop" onMouseDown={() => setShowCompatibility(false)}><section className="modal" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setShowCompatibility(false)}>×</button><span className="status-alert">Atenção farmacogenômica</span><h2>{medication}</h2><p className="modal-lead">Revisão recomendada</p><div className="info-block"><small>Genes relacionados</small><div className="gene-row">{user.genes?.slice(0, 2).map(gene => <span className="gene-chip" key={gene}>{gene}</span>)}</div></div><p>O perfil cadastrado indica que este medicamento deve ser acompanhado pelo profissional responsável.</p><div className="recommendation"><strong>Recomendação</strong><p>Converse com seu médico antes de iniciar, interromper ou alterar a dose.</p></div><button className="primary-btn full" onClick={() => setShowCompatibility(false)}>Entendi</button></section></div>}
+    {editing && <div className="modal-backdrop" onMouseDown={() => setEditing(false)}><section className="modal profile-editor" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setEditing(false)}>×</button><span className="eyebrow">Dados persistentes</span><h2>Editar perfil</h2><p className="modal-lead">As alterações também aparecerão para o médico vinculado.</p><div className="photo-editor"><UserAvatar userId={user.id} name={user.name} photoDataUrl={draft.photoDataUrl} /><div><label className="photo-upload">Escolher foto<input type="file" accept="image/*" onChange={event => selectPhoto(event.target.files?.[0])} /></label>{draft.photoDataUrl && <button className="remove-photo" onClick={() => setDraft(current => ({ ...current, photoDataUrl: '' }))}>Remover foto</button>}<small>JPG, PNG ou WebP · até 2 MB</small></div></div>{photoError && <p className="auth-error">{photoError}</p>}<div className="edit-fields"><label><span>Celular</span><input value={draft.phone} onChange={event => setDraft({ ...draft, phone: event.target.value })} /></label><MedicationPicker name={draft.medicationName} dosageMg={draft.dosageMg} onChange={(medicationName, dosageMg) => setDraft(current => ({ ...current, medicationName, dosageMg }))} /></div><div className="modal-actions"><button className="secondary-btn" onClick={() => setEditing(false)}>Cancelar</button><button className="primary-btn" onClick={saveProfile}>Salvar alterações</button></div></section></div>}
+    {showCompatibility && <div className="modal-backdrop" onMouseDown={() => setShowCompatibility(false)}><section className="modal" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setShowCompatibility(false)}>×</button><span className="status-alert">Atenção farmacogenômica</span><h2>{medication}</h2><p className="modal-lead">Dose registrada: {user.health?.dosageMg || 'não informada'} mg</p><div className="info-block"><small>Genes relacionados</small><div className="gene-row">{user.genes?.map(gene => <span className="gene-chip" key={gene}>{gene}</span>)}</div></div><p>O perfil cadastrado indica que este medicamento deve ser acompanhado pelo profissional responsável.</p><div className="recommendation"><strong>Recomendação</strong><p>Converse com seu médico antes de iniciar, interromper ou alterar a dose.</p></div><button className="primary-btn full" onClick={() => setShowCompatibility(false)}>Entendi</button></section></div>}
   </div>
 }

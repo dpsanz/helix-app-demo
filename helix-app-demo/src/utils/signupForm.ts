@@ -6,13 +6,14 @@ export type SignupFormData = {
   email: string
   password: string
   cardNumber: string
-  medication: string
+  medicationName: string
+  dosageMg: string
 }
 
 export type HealthSelections = Record<'conditions' | 'allergies' | 'family', string[]>
 
 export const EMPTY_SIGNUP_FORM: SignupFormData = {
-  name: '', cpf: '', birth: '', phone: '', email: '', password: '', cardNumber: '', medication: '',
+  name: '', cpf: '', birth: '', phone: '', email: '', password: '', cardNumber: '', medicationName: '', dosageMg: '',
 }
 
 const digits = (value: string) => value.replace(/\D/g, '')

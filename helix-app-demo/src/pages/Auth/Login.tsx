@@ -65,7 +65,7 @@ export default function Login() {
           {error && <p className="auth-error" role="alert">{error}</p>}
           <button type="submit" disabled={loading} className="login-submit">{loading ? 'Entrando…' : 'Entrar'}</button>
         </form>
-        {role === 'doctor' && <div className="doctor-demo-access"><span>Acesso médico demonstrativo</span><button type="button" onClick={() => { setCpfEmail('medico@helix.com'); setSenha('medico123') }}>Usar credenciais</button></div>}
+      <div className="doctor-demo-access"><span>{role === 'doctor' ? 'Acesso médico demonstrativo' : 'Perfil padrão · André'}</span><button type="button" onClick={() => { setCpfEmail(role === 'doctor' ? 'medico@helix.com' : 'andre@helix.com'); setSenha(role === 'doctor' ? 'medico123' : 'andre123') }}>Usar credenciais</button></div>
         <div className="login-security"><ShieldIcon /><p><strong>Sessão protegida</strong>Suas informações permanecem vinculadas somente a este navegador.</p></div>
       </div>
     </section>

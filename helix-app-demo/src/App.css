@@ -1456,3 +1456,78 @@ button:active:not(:disabled) { transform: scale(.975); }
   .delete-dialog-actions { flex-direction: column-reverse; }
   .delete-dialog-actions button { width: 100%; }
 }
+
+/* Avatar individual e foto de perfil */
+.user-avatar { --avatar-from: #116149; --avatar-to: #13a77c; position: relative; flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; color: #effff9; background: linear-gradient(145deg, var(--avatar-from), var(--avatar-to)); box-shadow: inset 0 1px rgba(255,255,255,.12), 0 8px 24px rgba(0,0,0,.2); font-weight: 700; letter-spacing: .02em; }
+.user-avatar.large { width: 58px; height: 58px; border-radius: 15px; font-size: .9rem; }
+.user-avatar.small { width: 34px; height: 34px; border-radius: 9px; font-size: .65rem; }
+.user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.photo-editor { display: flex; align-items: center; gap: 16px; margin: 18px 0; padding: 14px; background: #0a100e; border: 1px solid #24312c; border-radius: 9px; }
+.photo-editor > div { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.photo-editor small { width: 100%; color: #5f6f69; font-size: .62rem; }
+.photo-upload, .remove-photo { padding: 7px 10px; border-radius: 6px; font-size: .66rem; cursor: pointer; }
+.photo-upload { color: #c8eee2; background: rgba(20,166,125,.13); border: 1px solid rgba(20,166,125,.28); }
+.photo-upload input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.remove-photo { color: #a6b3ae; border: 1px solid #34443e; }
+
+/* Seletor pesquisável de medicamento e dose */
+.medication-picker { position: relative; display: grid; grid-template-columns: minmax(0,1fr) 112px; gap: 10px; }
+.medication-search-field, .dosage-field { display: grid; gap: 6px; }
+.medication-search-field > span, .dosage-field > span { color: #71807b; font: 600 .62rem var(--font-mono); letter-spacing: .07em; text-transform: uppercase; }
+.medication-search-field > div, .dosage-field > div { position: relative; display: flex; align-items: center; }
+.medication-picker input { width: 100%; min-height: 40px; box-sizing: border-box; padding: 8px 34px 8px 11px; color: #dce8e4; background: rgba(0,0,0,.2); border: 1px solid #293832; border-radius: 7px; outline: 0; font-size: .75rem; }
+.medication-picker input:focus { border-color: #14a67d; box-shadow: 0 0 0 3px rgba(20,166,125,.08); }
+.medication-search-icon { position: absolute; right: 11px; color: #5b756c; font-size: 1rem; pointer-events: none; }
+.dosage-field input { padding-right: 32px; }
+.dosage-field b { position: absolute; right: 10px; color: #699084; font: 500 .65rem var(--font-mono); pointer-events: none; }
+.medication-results { position: absolute; z-index: 50; top: calc(100% + 5px); right: 122px; left: 0; overflow-x: hidden; overflow-y: auto; max-height: 190px; background: #0c1411; border: 1px solid #2b4038; border-radius: 8px; box-shadow: 0 18px 44px rgba(0,0,0,.48); }
+.medication-results button { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 11px; color: #c5d2cd; text-align: left; border-bottom: 1px solid #1d2a25; transition: background-color 180ms ease; }
+.medication-results button:last-child { border-bottom: 0; }
+.medication-results button:hover { background: rgba(20,166,125,.1); }
+.medication-results button span { display: grid; gap: 1px; }
+.medication-results strong { font-size: .68rem; }
+.medication-results small { color: #61716b; font-size: .58rem; }
+.medication-results em { color: #79bca8; font: 500 .58rem var(--font-mono); font-style: normal; white-space: nowrap; }
+.edit-fields > .medication-picker { margin-top: 2px; }
+
+/* Leitura genômica explicada */
+.dashboard-grid > .panel.span-full { grid-column: 1 / -1; }
+.gene-section-lead { max-width: 760px; margin: -5px 0 16px; color: #71817b; font-size: .75rem; line-height: 1.6; }
+.gene-insight-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; }
+.gene-insight-card { min-height: 142px; box-sizing: border-box; display: flex; flex-direction: column; padding: 14px; background: rgba(0,0,0,.18); border: 1px solid #26352f; border-radius: 8px; transition: 240ms var(--ease-helix); }
+.gene-insight-card:hover { border-color: rgba(20,166,125,.52); transform: translateY(-2px); }
+.gene-insight-card > div { display: flex; align-items: center; gap: 8px; }
+.gene-insight-card code { padding: 4px 7px; color: #b5ffeb; background: rgba(20,166,125,.13); border: 1px solid rgba(20,166,125,.28); border-radius: 5px; font: 600 .67rem var(--font-mono); }
+.gene-insight-card span { color: #aebcb7; font-size: .7rem; font-weight: 600; }
+.gene-insight-card p { margin: 12px 0 8px; color: #87958f; font-size: .69rem; line-height: 1.55; }
+.gene-insight-card small { margin-top: auto; padding-top: 8px; color: #638377; border-top: 1px solid #21302a; font-size: .61rem; line-height: 1.5; }
+
+/* Módulo adaptativo para diabetes */
+.diabetes-overview { margin-bottom: 10px; }
+.diabetes-badge { padding: 6px 9px; color: #9debd3; background: rgba(20,166,125,.1); border: 1px solid rgba(20,166,125,.25); border-radius: 999px; font-size: .63rem; }
+.diabetes-lead { margin: -6px 0 15px; color: #71817b; font-size: .72rem; }
+.trend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.trend-card { overflow: hidden; padding: 15px; background: rgba(0,0,0,.17); border: 1px solid #26352f; border-radius: 8px; }
+.trend-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.trend-heading h3 { margin: 3px 0 2px; color: #dce7e3; font-size: .9rem; }
+.trend-heading p { color: #64736d; font-size: .62rem; }
+.trend-heading > strong { color: #b6f5e2; font: 500 1.35rem var(--font-mono); white-space: nowrap; }
+.trend-heading > strong small { margin-left: 4px; color: #66867c; font-size: .58rem; }
+.trend-chart { margin-top: 8px; }
+.trend-chart svg { width: 100%; height: 130px; overflow: visible; }
+.chart-gridline { stroke: #21302a; stroke-width: 1; stroke-dasharray: 4 5; }
+.chart-area { fill: rgba(20,166,125,.09); }
+.chart-line { fill: none; stroke: #48c7a2; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.chart-point { fill: #a8f2db; stroke: #103b30; stroke-width: 3; }
+.chart-labels { display: flex; justify-content: space-between; padding: 0 2px; color: #52645d; font: 500 .55rem var(--font-mono); }
+
+@media (max-width: 900px) {
+  .gene-insight-grid { grid-template-columns: 1fr; }
+  .gene-insight-card { min-height: 0; }
+  .trend-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .medication-picker { grid-template-columns: 1fr; }
+  .medication-results { right: 0; top: 66px; }
+  .diabetes-badge { white-space: normal; }
+}

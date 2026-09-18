@@ -3,6 +3,7 @@ import type { HealthSelections, SignupFormData } from '../../utils/signupForm'
 import { formatSignupField } from '../../utils/signupForm'
 import { SIGNUP_PLANS } from '../../data/signupOptions'
 import CheckIcon from './CheckIcon'
+import MedicationPicker from '../MedicationPicker'
 
 const conditions = ['Hipertensão', 'Diabetes', 'Colesterol alto', 'Depressão', 'Asma', 'Tireoide', 'Nenhuma']
 const allergies = ['Penicilina', 'Dipirona', 'Ibuprofeno', 'AAS', 'Nenhuma']
@@ -63,7 +64,7 @@ function HealthStep({ form, setForm, selected, onToggle }: Pick<Props, 'form' | 
   return <>
     <Heading code="03 · SAÚDE" title="Contexto de saúde" description="Para personalizar seu perfil genômico inicial." />
     <ChipGroup label="Condições crônicas conhecidas" items={conditions} selected={selected.conditions} onToggle={item => onToggle('conditions', item)} />
-    <label className="medication-field"><span>Medicamentos em uso contínuo</span><input value={form.medication} onChange={event => setForm(current => ({ ...current, medication: event.target.value }))} placeholder="Ex.: Losartana 50 mg" /></label>
+    <div className="medication-field"><span>Medicamento em uso contínuo</span><MedicationPicker name={form.medicationName} dosageMg={form.dosageMg} onChange={(medicationName, dosageMg) => setForm(current => ({ ...current, medicationName, dosageMg }))} /></div>
     <ChipGroup label="Alergias a medicamentos" items={allergies} selected={selected.allergies} onToggle={item => onToggle('allergies', item)} />
     <ChipGroup label="Histórico familiar relevante" items={familyHistory} selected={selected.family} onToggle={item => onToggle('family', item)} />
   </>

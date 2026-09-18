@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { deleteAllBeneficiaries, deleteUser, initials, listAllUsers } from '../../data/helixDb'
+import { deleteAllBeneficiaries, deleteUser, listAllUsers } from '../../data/helixDb'
 import type { HelixUser, UserRole } from '../../data/helixDb'
+import UserAvatar from '../../components/UserAvatar'
 
 type Filter = 'all' | UserRole
 type DeleteTarget = { kind: 'user'; user: HelixUser } | { kind: 'all'; count: number }
@@ -106,7 +107,7 @@ function Metric({ label, value, detail, alert = false }: { label: string; value:
 function UserRow({ user, onDelete }: { user: HelixUser; onDelete: () => void }) {
   const systemAccount = user.role === 'doctor'
   return <tr>
-    <td><div className="management-user"><span className="avatar small">{initials(user.name)}</span><div><strong>{user.name}</strong><small>{user.email}</small></div></div></td>
+    <td><div className="management-user"><UserAvatar userId={user.id} name={user.name} photoDataUrl={user.photoDataUrl} size="small" /><div><strong>{user.name}</strong><small>{user.email}</small></div></div></td>
     <td><span className={`role-badge ${user.role}`}>{user.role === 'doctor' ? 'Médico' : 'Beneficiário'}</span></td>
     <td><strong className="management-code">{user.id}</strong><small>{formatCpf(user.cpf)}</small></td>
     <td><strong>{user.plan || 'Conta de sistema'}</strong><small>{user.cardNumber || 'Acesso profissional'}</small></td>

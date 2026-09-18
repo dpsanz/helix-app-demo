@@ -6,6 +6,8 @@ export type HealthProfile = {
   allergies: string[]
   familyHistory: string[]
   medication: string
+  medicationName?: string
+  dosageMg?: string
 }
 
 export type HelixUser = {
@@ -25,6 +27,7 @@ export type HelixUser = {
   genomicStatus?: string
   genes?: string[]
   patientStatus?: PatientStatus
+  photoDataUrl?: string
 }
 
 export type CreateBeneficiaryInput = Omit<HelixUser, 'id' | 'role' | 'passwordHash' | 'createdAt' | 'doctorId' | 'genomicStatus' | 'genes' | 'patientStatus'> & { password: string }
@@ -62,6 +65,7 @@ function openDatabase() {
       const db = request.result
       try {
         await seedDoctor(db)
+        await seedAndre(db)
         resolve(db)
       } catch (error) {
         db.close()
@@ -70,6 +74,43 @@ function openDatabase() {
     }
     request.onerror = () => reject(request.error)
   })
+}
+
+async function seedAndre(db: IDBDatabase) {
+  const seedKey = 'helix_default_andre_seeded'
+  if (localStorage.getItem(seedKey)) return
+  const id = 'HLX-ANDRE1'
+  const existing = await requestResult<HelixUser | undefined>(db.transaction(USERS).objectStore(USERS).get(id))
+  if (existing) { localStorage.setItem(seedKey, 'true'); return }
+  const emailOwner = await requestResult<HelixUser | undefined>(db.transaction(USERS).objectStore(USERS).index('email').get('andre@helix.com'))
+  if (emailOwner) { localStorage.setItem(seedKey, 'true'); return }
+  const andre: HelixUser = {
+    id,
+    role: 'beneficiary',
+    name: 'André Silva',
+    email: 'andre@helix.com',
+    cpf: '12345678901',
+    passwordHash: await hashPassword('andre123'),
+    phone: '(11) 98765-4321',
+    birth: '1988-04-12',
+    cardNumber: '0083 4417 8820 0001',
+    plan: 'Helix Completo',
+    doctorId: DEMO_DOCTOR_ID,
+    createdAt: '2026-08-12T12:00:00.000Z',
+    genomicStatus: 'Perfil genômico ativo',
+    genes: ['TCF7L2', 'SLC30A8', 'CYP2C9'],
+    patientStatus: 'ok',
+    health: {
+      conditions: ['Diabetes'],
+      allergies: ['Nenhuma'],
+      familyHistory: ['Diabetes tipo 2'],
+      medication: 'Metformina 500 mg',
+      medicationName: 'Metformina',
+      dosageMg: '500',
+    },
+  }
+  await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).add(andre))
+  localStorage.setItem(seedKey, 'true')
 }
 
 async function seedDoctor(db: IDBDatabase) {
@@ -107,7 +148,7 @@ export async function createBeneficiary(input: CreateBeneficiaryInput) {
     doctorId: DEMO_DOCTOR_ID,
     createdAt: new Date().toISOString(),
     genomicStatus: 'Perfil genômico em preparação',
-    genes: ['CYP2C9', 'VKORC1', 'CYP2C19'],
+    genes: input.health?.conditions.some(condition => condition.toLowerCase().includes('diabet')) ? ['TCF7L2', 'SLC30A8', 'CYP2C9'] : ['CYP2C9', 'VKORC1', 'CYP2C19'],
     patientStatus: input.health?.medication ? 'alerta' : 'ok',
   }
   await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).add(user))
@@ -180,4 +221,10 @@ export async function deleteAllBeneficiaries() {
 
 export function initials(name: string) {
   return name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase()
+}
+
+export function medicationLabel(health?: HealthProfile) {
+  if (!health) return ''
+  if (health.medicationName) return `${health.medicationName}${health.dosageMg ? ` ${health.dosageMg} mg` : ''}`
+  return health.medication
 }
