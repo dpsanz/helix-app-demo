@@ -39,6 +39,12 @@ export default function PortalMedico() {
     window.addEventListener('focus', refresh)
     return () => window.removeEventListener('focus', refresh)
   }, [load])
+  useEffect(() => {
+    if (!selected) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previousOverflow }
+  }, [selected])
 
   const leave = () => { logout(); navigate('/') }
   const filtered = filter === 'todos' ? patients : patients.filter(patient => patient.patientStatus === filter)

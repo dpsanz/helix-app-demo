@@ -40,6 +40,13 @@ export default function Perfil() {
     }).finally(() => setLoading(false))
   }, [userId])
 
+  useEffect(() => {
+    if (!editing && !showCompatibility) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previousOverflow }
+  }, [editing, showCompatibility])
+
   const leave = () => { logout(); navigate('/') }
   const openEditor = () => { if (user) setDraft(draftFromUser(user)); setPhotoError(''); setEditing(true) }
   const saveProfile = async () => {
