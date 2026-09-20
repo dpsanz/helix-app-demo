@@ -50,11 +50,13 @@ export default function Perfil() {
   useEffect(() => {
     if (loading || !user) return
     if (new URLSearchParams(location.search).get('edit') === '1') {
-      setDraft(draftFromUser(user))
-      setPhotoError('')
-      setEditing(true)
-      navigate('/perfil', { replace: true })
-      return
+      const frame = window.requestAnimationFrame(() => {
+        setDraft(draftFromUser(user))
+        setPhotoError('')
+        setEditing(true)
+        navigate('/perfil', { replace: true })
+      })
+      return () => window.cancelAnimationFrame(frame)
     }
     const targetId = location.hash.slice(1)
     if (!targetId) return

@@ -51,10 +51,9 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
 
   useEffect(() => {
     if (location.pathname !== dashboardPath) {
-      setActiveSection('')
       return
     }
-    const sectionIds = isDoctor ? ['overview', 'agenda', 'patients'] : ['overview', 'health', 'treatment']
+    const sectionIds = isDoctor ? ['overview', 'agenda', 'patients'] : ['overview', 'health']
     const updateActiveSection = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
         setActiveSection(sectionIds.at(-1) ?? 'overview')
