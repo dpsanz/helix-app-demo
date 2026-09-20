@@ -45,7 +45,7 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
     : [
         { label: 'Visão geral', icon: 'overview', to: '/perfil#overview', sectionId: 'overview' },
         { label: 'Minha saúde', icon: 'profile', to: '/perfil#health', sectionId: 'health' },
-        { label: 'Medicamentos', icon: 'care', to: '/medicamentos' },
+        { label: 'Tratamento', icon: 'care', to: '/medicamentos' },
         { label: 'Editar perfil', icon: 'edit', onClick: onPrimaryAction },
       ]
 
