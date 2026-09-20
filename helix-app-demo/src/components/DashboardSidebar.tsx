@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import UserAvatar from './UserAvatar'
 
 type SidebarIcon = 'overview' | 'profile' | 'care' | 'patients' | 'calendar' | 'refresh' | 'edit' | 'logout'
-type NavItem = { label: string; icon: SidebarIcon; href?: string; onClick?: () => void }
+type NavItem = { label: string; icon: SidebarIcon; to?: string; sectionId?: string; onClick?: () => void }
 type Props = {
   userId: string
   name: string
@@ -30,23 +31,29 @@ function Icon({ name }: { name: SidebarIcon }) {
 
 export default function DashboardSidebar({ userId, name, photoDataUrl, role, onPrimaryAction, onLogout, primaryTargetId }: Props) {
   const isDoctor = role === 'doctor'
+  const location = useLocation()
+  const dashboardPath = isDoctor ? '/portal-medico' : '/perfil'
   const [activeSection, setActiveSection] = useState('overview')
   const [workspaceOpen, setWorkspaceOpen] = useState(false)
   const items: NavItem[] = isDoctor
     ? [
-        { label: 'Visão geral', icon: 'overview', href: '#overview' },
-        { label: 'Agenda', icon: 'calendar', href: '#agenda' },
-        { label: 'Pacientes', icon: 'patients', href: '#patients' },
+        { label: 'Visão geral', icon: 'overview', to: '/portal-medico#overview', sectionId: 'overview' },
+        { label: 'Agenda', icon: 'calendar', to: '/portal-medico#agenda', sectionId: 'agenda' },
+        { label: 'Pacientes', icon: 'patients', to: '/portal-medico#patients', sectionId: 'patients' },
         { label: 'Atualizar dados', icon: 'refresh', onClick: onPrimaryAction },
       ]
     : [
-        { label: 'Visão geral', icon: 'overview', href: '#overview' },
-        { label: 'Minha saúde', icon: 'profile', href: '#health' },
-        { label: 'Tratamento', icon: 'care', href: '#treatment' },
+        { label: 'Visão geral', icon: 'overview', to: '/perfil#overview', sectionId: 'overview' },
+        { label: 'Minha saúde', icon: 'profile', to: '/perfil#health', sectionId: 'health' },
+        { label: 'Medicamentos', icon: 'care', to: '/medicamentos' },
         { label: 'Editar perfil', icon: 'edit', onClick: onPrimaryAction },
       ]
 
   useEffect(() => {
+    if (location.pathname !== dashboardPath) {
+      setActiveSection('')
+      return
+    }
     const sectionIds = isDoctor ? ['overview', 'agenda', 'patients'] : ['overview', 'health', 'treatment']
     const updateActiveSection = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
@@ -68,7 +75,7 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
       window.removeEventListener('scroll', updateActiveSection)
       window.removeEventListener('resize', updateActiveSection)
     }
-  }, [isDoctor])
+  }, [dashboardPath, isDoctor, location.pathname])
 
   const runPrimaryAction = () => {
     onPrimaryAction()
@@ -92,8 +99,8 @@ export default function DashboardSidebar({ userId, name, photoDataUrl, role, onP
     </div>
     <nav className="sidebar-nav">
       <span className="sidebar-label">NAVEGAÇÃO</span>
-      {items.map(item => item.href
-        ? <a key={item.label} className={`sidebar-link ${activeSection === item.href.slice(1) ? 'active' : ''}`} href={item.href} onClick={() => setActiveSection(item.href!.slice(1))}><Icon name={item.icon} /><span>{item.label}</span></a>
+      {items.map(item => item.to
+        ? <Link key={item.label} className={`sidebar-link ${(item.sectionId ? location.pathname === dashboardPath && activeSection === item.sectionId : location.pathname === item.to) ? 'active' : ''}`} to={item.to} onClick={() => { if (item.sectionId) setActiveSection(item.sectionId) }}><Icon name={item.icon} /><span>{item.label}</span></Link>
         : <button key={item.label} className="sidebar-link" onClick={item.onClick === onPrimaryAction ? runPrimaryAction : item.onClick}><Icon name={item.icon} /><span>{item.label}</span></button>)}
     </nav>
     <div className="sidebar-footer">

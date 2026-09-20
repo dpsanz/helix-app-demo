@@ -78,10 +78,18 @@ function openDatabase() {
 
 async function seedAndre(db: IDBDatabase) {
   const seedKey = 'helix_default_andre_seeded'
-  if (localStorage.getItem(seedKey)) return
   const id = 'HLX-ANDRE1'
   const existing = await requestResult<HelixUser | undefined>(db.transaction(USERS).objectStore(USERS).get(id))
-  if (existing) { localStorage.setItem(seedKey, 'true'); return }
+  if (existing) {
+    const legacyMedication = (existing.health?.medicationName === 'Metformina' && existing.health?.dosageMg === '500')
+      || (existing.health?.medicationName === 'Varfarina' && existing.health?.dosageMg === '2.5')
+    if (legacyMedication) {
+      const health = { ...existing.health!, medication: 'Varfarina 5 mg', medicationName: 'Varfarina', dosageMg: '5' }
+      await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).put({ ...existing, health, patientStatus: 'alerta' }))
+    }
+    localStorage.setItem(seedKey, 'true')
+    return
+  }
   const emailOwner = await requestResult<HelixUser | undefined>(db.transaction(USERS).objectStore(USERS).index('email').get('andre@helix.com'))
   if (emailOwner) { localStorage.setItem(seedKey, 'true'); return }
   const andre: HelixUser = {
@@ -99,14 +107,14 @@ async function seedAndre(db: IDBDatabase) {
     createdAt: '2026-08-12T12:00:00.000Z',
     genomicStatus: 'Perfil genômico ativo',
     genes: ['TCF7L2', 'SLC30A8', 'CYP2C9'],
-    patientStatus: 'ok',
+    patientStatus: 'alerta',
     health: {
       conditions: ['Diabetes'],
       allergies: ['Nenhuma'],
       familyHistory: ['Diabetes tipo 2'],
-      medication: 'Metformina 500 mg',
-      medicationName: 'Metformina',
-      dosageMg: '500',
+      medication: 'Varfarina 5 mg',
+      medicationName: 'Varfarina',
+      dosageMg: '5',
     },
   }
   await requestResult(db.transaction(USERS, 'readwrite').objectStore(USERS).add(andre))

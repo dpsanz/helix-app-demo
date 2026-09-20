@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import GeneInsights from '../../components/GeneInsights'
 import MedicationPicker from '../../components/MedicationPicker'
 import TrendChart from '../../components/TrendChart'
@@ -25,12 +25,12 @@ function draftFromUser(user: HelixUser): Draft {
 export default function Perfil() {
   const [user, setUser] = useState<HelixUser | null>(null)
   const [loading, setLoading] = useState(true)
-  const [showCompatibility, setShowCompatibility] = useState(false)
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState<Draft>({ phone: '', medicationName: '', dosageMg: '', photoDataUrl: '' })
   const [photoError, setPhotoError] = useState('')
   const { logout, userId } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     if (!userId) return
@@ -41,11 +41,26 @@ export default function Perfil() {
   }, [userId])
 
   useEffect(() => {
-    if (!editing && !showCompatibility) return
+    if (!editing) return
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = previousOverflow }
-  }, [editing, showCompatibility])
+  }, [editing])
+
+  useEffect(() => {
+    if (loading || !user) return
+    if (new URLSearchParams(location.search).get('edit') === '1') {
+      setDraft(draftFromUser(user))
+      setPhotoError('')
+      setEditing(true)
+      navigate('/perfil', { replace: true })
+      return
+    }
+    const targetId = location.hash.slice(1)
+    if (!targetId) return
+    const timer = window.setTimeout(() => document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0)
+    return () => window.clearTimeout(timer)
+  }, [loading, location.hash, location.search, navigate, user])
 
   const leave = () => { logout(); navigate('/') }
   const openEditor = () => { if (user) setDraft(draftFromUser(user)); setPhotoError(''); setEditing(true) }
@@ -94,11 +109,10 @@ export default function Perfil() {
       <div className="dashboard-grid">
         <section className="panel span-full"><div className="section-heading"><div><span className="eyebrow">Farmacogenômica explicada</span><h2>O que seus genes representam</h2></div><span className="muted">{user.genes?.length ?? 0} marcadores analisados</span></div><p className="gene-section-lead">Cada marcador é interpretado junto com seus medicamentos e condições de saúde. Ele não representa um diagnóstico isolado.</p><GeneInsights genes={user.genes} /><div className="kit-card"><div><strong>Kit salivar Helix</strong><p>Perfil integrado ao acompanhamento clínico</p></div><span className="status-ok">{user.genomicStatus}</span></div></section>
         <section className="panel" id="health"><span className="eyebrow">Saúde</span><h2>Contexto informado</h2><div className="profile-facts"><div><small>Condições</small><strong>{user.health?.conditions.join(', ') || 'Não informado'}</strong></div><div><small>Alergias</small><strong>{user.health?.allergies.join(', ') || 'Não informado'}</strong></div><div><small>Contato</small><strong>{user.phone || 'Não informado'}</strong></div></div></section>
-        <section className="panel span-2" id="treatment"><span className="eyebrow">Tratamento</span><h2>Medicamento acompanhado</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? `${user.health?.medicationName || medication} · dose registrada em ${user.health?.dosageMg || '—'} mg` : 'Edite seu perfil para selecionar um medicamento e a dose'}</p></div>{hasMedication && <><span className="status-alert">● Acompanhar</span><button className="primary-btn" onClick={() => setShowCompatibility(true)}>Ver compatibilidade</button></>}</div></section>
+        <section className="panel span-2" id="treatment"><span className="eyebrow">Tratamento</span><h2>Medicamento acompanhado</h2><div className="medication-card"><div className="med-icon">Rx</div><div className="grow"><strong>{medication}</strong><p>{hasMedication ? `${user.health?.medicationName || medication} · dose registrada em ${user.health?.dosageMg || '—'} mg` : 'Adicione um medicamento para acompanhar a dose e os alertas do seu perfil'}</p></div>{hasMedication && <span className="status-alert">● Acompanhar</span>}<button className="primary-btn" onClick={() => navigate('/medicamentos')}>Gerenciar medicamento</button></div></section>
       </div>
     </main>
 
     {editing && <div className="modal-backdrop" onMouseDown={() => setEditing(false)}><section className="modal profile-editor" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setEditing(false)}>×</button><span className="eyebrow">Dados persistentes</span><h2>Editar perfil</h2><p className="modal-lead">As alterações também aparecerão para o médico vinculado.</p><div className="photo-editor"><UserAvatar userId={user.id} name={user.name} photoDataUrl={draft.photoDataUrl} /><div><label className="photo-upload">Escolher foto<input type="file" accept="image/*" onChange={event => selectPhoto(event.target.files?.[0])} /></label>{draft.photoDataUrl && <button className="remove-photo" onClick={() => setDraft(current => ({ ...current, photoDataUrl: '' }))}>Remover foto</button>}<small>JPG, PNG ou WebP · até 2 MB</small></div></div>{photoError && <p className="auth-error">{photoError}</p>}<div className="edit-fields"><label><span>Celular</span><input value={draft.phone} onChange={event => setDraft({ ...draft, phone: event.target.value })} /></label><MedicationPicker name={draft.medicationName} dosageMg={draft.dosageMg} onChange={(medicationName, dosageMg) => setDraft(current => ({ ...current, medicationName, dosageMg }))} /></div><div className="modal-actions"><button className="secondary-btn" onClick={() => setEditing(false)}>Cancelar</button><button className="primary-btn" onClick={saveProfile}>Salvar alterações</button></div></section></div>}
-    {showCompatibility && <div className="modal-backdrop" onMouseDown={() => setShowCompatibility(false)}><section className="modal" role="dialog" aria-modal="true" onMouseDown={event => event.stopPropagation()}><button className="modal-close" onClick={() => setShowCompatibility(false)}>×</button><span className="status-alert">Atenção farmacogenômica</span><h2>{medication}</h2><p className="modal-lead">Dose registrada: {user.health?.dosageMg || 'não informada'} mg</p><div className="info-block"><small>Genes relacionados</small><div className="gene-row">{user.genes?.map(gene => <span className="gene-chip" key={gene}>{gene}</span>)}</div></div><p>O perfil cadastrado indica que este medicamento deve ser acompanhado pelo profissional responsável.</p><div className="recommendation"><strong>Recomendação</strong><p>Converse com seu médico antes de iniciar, interromper ou alterar a dose.</p></div><button className="primary-btn full" onClick={() => setShowCompatibility(false)}>Entendi</button></section></div>}
   </div>
 }
